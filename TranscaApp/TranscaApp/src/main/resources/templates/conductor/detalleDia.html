@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalle del Día - Conductor</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h2>Detalles del Día: <span th:text="${dia}"></span></h2>
+
+    <table border="1">
+        <tr>
+            <th>Ruta</th>
+            <th>Modelo</th>
+            <th>Placa</th>
+            <th>Horario</th>
+        </tr>
+        <tr th:each="transporte : ${transporteDia}">
+            <td th:text="${transporte.ruta}"></td>
+            <td th:text="${transporte.modelo}"></td>
+            <td th:text="${transporte.placa}"></td>
+            <td th:text="${transporte.horario}"></td>
+        </tr>
+    </table>
+
+    <br>
+    <a href="/conductor/horario">Volver al Horario</a>
+</body>
+</html>

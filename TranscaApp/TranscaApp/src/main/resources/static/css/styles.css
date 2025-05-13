@@ -1,0 +1,107 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+header {
+    background-color: #ff6600;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .logo {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+header .user-menu {
+    display: flex;
+    gap: 10px;
+    position: relative;
+}
+
+.user-menu button {
+    background-color: white;
+    color: #ff6600;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.user-menu .dropdown {
+    position: absolute;
+    top: 35px;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    display: none;
+    flex-direction: column;
+    width: 150px;
+}
+
+.user-menu:hover .dropdown {
+    display: flex;
+}
+
+.user-menu .dropdown a {
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+    border-bottom: 1px solid #ccc;
+}
+
+.user-menu .dropdown a:hover {
+    background-color: #f0f0f0;
+}
+
+.main-container {
+    display: flex;
+    height: calc(100vh - 50px); /* Ajusta la altura del contenedor principal */
+}
+
+.sidebar {
+    background-color: white;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h3 {
+    color: #ff6600;
+}
+
+.sidebar label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.sidebar select, .sidebar input[type="text"] {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.sidebar button {
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.map-container {
+    flex-grow: 1;
+    position: relative;
+}
+
+/* Estilo del mapa */
+#map {
+    width: 500px;
+    height: 100px;
+}

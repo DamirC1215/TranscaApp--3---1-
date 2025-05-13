@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nequi - Recargar Tarjeta TransCaribe</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    
+    background-color: #FBE5F2;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('img/background.png'); 
+    background-position: right;
+    background-repeat: no-repeat;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.title {
+    font-size: 1.5rem;
+    text-align: center;
+    color: #333333;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 1rem;
+    color: #555555;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.form-control:read-only {
+    background-color: #f9f9f9;
+    color: #777777;
+    cursor: not-allowed;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #DA0081;
+    color: #ffffff;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: #cbcfd4;
+}
+
+    </style>
+   
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Nequi</h1>
+        <h2 class="title">Recargar Tarjeta</h2>
+        
+        <!-- Formulario para recargar la tarjeta -->
+        <form th:action="@{/recargar}" method="post" id="recargaForm" class="mt-4">
+            <!-- Campo oculto para pasar el usuarioId -->
+            <input type="hidden" id="usuarioId" name="usuarioId" th:value="${tarjeta.usuario.id}" />
+        
+            <!-- Número de Barras (solo lectura) -->
+            <div class="form-group">
+                <label for="numeroDeBarras" class="form-label">Número de Barras</label>
+                <input type="text" id="numeroDeBarras" name="numeroDeBarras" class="form-control" th:value="${tarjeta.numeroDeBarras}" readonly>
+            </div>
+        
+            <!-- Monto (campo editable para recargar) -->
+            <div class="form-group">
+                <label for="monto" class="form-label">Monto</label>
+                <input type="number" id="monto" name="monto" class="form-control" placeholder="Ingresa el monto" min="1" required>
+            </div>
+        
+            <!-- Botón para enviar la recarga -->
+            <button type="submit" class="btn-submit">Recargar</button>
+        </form>
+        
+        
+
+        <!-- Sección de mensajes -->
+        <div id="result" class="mt-4">
+            <!-- Mensaje de éxito -->
+            <div class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"></div>
+            
+            <!-- Mensaje de error -->
+            <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+        </div>
+    </div>
+
+</body>
+</html>

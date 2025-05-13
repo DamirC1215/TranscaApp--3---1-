@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compra tu Tarjeta en Nequi</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    
+    background-color: #FBE5F2;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('img/background.png'); 
+    background-position: right;
+    background-repeat: no-repeat;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.title {
+    font-size: 1.5rem;
+    text-align: center;
+    color: #333333;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 1rem;
+    color: #555555;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.form-control:read-only {
+    background-color: #f9f9f9;
+    color: #777777;
+    cursor: not-allowed;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #DA0081;
+    color: #ffffff;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: #cbcfd4;
+}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="title">Nequi</h1>
+        <h2 class="title">Comprar Tarjeta</h2>
+        <form th:action="@{/confirmar-compra-tarjeta}" method="post">
+            <p th:if="${errorMessage != null}" style="color: red;" th:text="${errorMessage}"></p>
+            <p th:if="${successMessage != null}" style="color: green;" th:text="${successMessage}"></p>
+            <p>¿Deseas confirmar la compra de una nueva tarjeta?</p>
+            <button type="submit" class="btn-submit">Confirmar Compra</button>
+        </form>
+        <a href="/perfil" class="back-button">Volver a Perfil</a> <!-- Enlace para regresar a la vista de perfil -->
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Horario de Trabajo - Conductor</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h2>Horario de Trabajo</h2>
+
+    <table border="1">
+        <tr>
+            <th>Día</th>
+            <th>Turno</th>
+            <th>Acción</th>
+        </tr>
+        <tr th:each="dia : ${horario}">
+            <td th:text="${dia.diaSemana}"></td>
+            <td th:text="${dia.turno}"></td>
+            <td><a th:href="@{/conductor/detalle-dia/{dia}(dia=${dia.diaSemana})}">Ver Detalles</a></td>
+        </tr>
+    </table>
+
+    <br>
+    <a href="/conductor/logout">Cerrar Sesión</a>
+</body>
+</html>

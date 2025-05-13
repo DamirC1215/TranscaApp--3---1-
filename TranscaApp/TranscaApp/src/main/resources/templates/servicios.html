@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios - Transcaribe</title>
+    <style>
+        body {
+            background-image: url('img/imagen19.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            color: #FFFFFF;
+        }
+        
+        h1 {
+            color: #FFFFFF;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #FFD700;
+            border-bottom: 1px solid #FFFFFF;
+            padding-bottom: 5px;
+            margin-top: 20px;
+        }
+
+        p, li {
+            text-align: justify;
+            color: #F0E68C;
+        }
+
+        .container {
+            position: relative;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            color: #F0E68C;
+        }
+
+        .back-icon {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #F0E68C;
+            text-decoration: none;
+        }
+
+        .back-icon svg {
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.8em;
+            color: #F0E68C;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="javascript:history.back()" class="back-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </a>
+
+        <h1>Servicios de Transcaribe</h1>
+
+        <h2>1. Horarios</h2>
+        <p>Consulta nuestros horarios de operación para cada ruta en nuestra página de horarios.</p>
+
+        <h2>2. Rutas</h2>
+        <p>Disponemos de varias rutas. Puedes encontrar el mapa y detalles de cada una en nuestra sección de rutas.</p>
+
+        <h2>3. Tarifas</h2>
+        <p>Las tarifas son las siguientes:</p>
+        <ul>
+            <li>Pasaje regular: <strong>$3000</strong></li>
+            <li>Descuentos: <strong>50%</strong> para estudiantes.</li>
+        </ul>
+
+        <h2>4. Normas y Políticas</h2>
+        <p>Para garantizar un viaje seguro y agradable, por favor sigue nuestras normas:</p>
+        <ul>
+            <li>Tomar asiento y no desplazarse durante el movimiento.</li>
+            <li>Prohibido comer y beber en los vehículos.</li>
+        </ul>
+
+        <h2>5. Contacto y Atención al Cliente</h2>
+        <p>Para consultas, puedes contactarnos:</p>
+        <ul>
+            <li>Teléfono: <strong>(123) 456-789</strong></li>
+            <li>Email: <strong>atencion@transcaribe.com</strong></li>
+        </ul>
+
+        <h2>6. Actualizaciones y Cambios</h2>
+        <p>Visita nuestra página de noticias para estar al tanto de cualquier cambio en horarios y rutas.</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Transcaribe. Todos los derechos reservados.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+package com.example.transcaribe.entity;
+
+public class RecargaDTO {
+    private Double monto;
+
+    // Getters y Setters
+    public Double getMonto() {
+        return monto;
+    }
+
+    public void setMonto(Double monto) {
+        this.monto = monto;
+    }
+}
