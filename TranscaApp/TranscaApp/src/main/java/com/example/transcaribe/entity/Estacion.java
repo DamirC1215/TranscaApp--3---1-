@@ -1,11 +1,11 @@
 package com.example.transcaribe.entity;
 
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,7 +19,7 @@ public class Estacion {
     private String nombre;
     private Double latitud;
     private Double longitud;
-    
+
     private List<Trayecto> trayectos; // Una estación puede pertenecer a múltiples trayectos
 
 
@@ -35,6 +35,5 @@ public class Estacion {
         this.trayectos = trayectos;
     }
 
-    
 
 }

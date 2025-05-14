@@ -1,9 +1,9 @@
 package com.example.transcaribe.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.example.transcaribe.entity.Conductor;
 import com.example.transcaribe.repository.ConductorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +38,7 @@ public class ConductorService {
     public Conductor buscarPorCorreo(String correoElectronico) {
         return conductorRepository.findByCorreoElectronico(correoElectronico).orElse(null);
     }
+
     // 👉 Obtiene todos los conductores
     public List<Conductor> obtenerTodos() {
         return conductorRepository.findAll();

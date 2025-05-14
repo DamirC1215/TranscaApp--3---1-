@@ -1,10 +1,9 @@
 package com.example.transcaribe.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.example.transcaribe.entity.Usuario;
 import com.example.transcaribe.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class UsuarioServices {
@@ -26,6 +25,6 @@ public class UsuarioServices {
         return usuarioRepository.findByEmail(email).orElse(null);
     }
 
-    
+
 }
     

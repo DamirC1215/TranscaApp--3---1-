@@ -1,15 +1,14 @@
 package com.example.transcaribe.services;
 
 import com.example.transcaribe.controller.Logeo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.example.transcaribe.entity.Administrador;
 import com.example.transcaribe.entity.Conductor;
 import com.example.transcaribe.entity.Usuario;
 import com.example.transcaribe.repository.AdministradorRepository;
 import com.example.transcaribe.repository.ConductorRepository;
 import com.example.transcaribe.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
@@ -17,15 +16,15 @@ import java.util.Optional;
 public class AutenticacionService {
 
     @Autowired
-    private  UsuarioRepository usuarioRepository;
+    private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private  AdministradorRepository administradorRepository;
+    private AdministradorRepository administradorRepository;
 
     @Autowired
-    private  ConductorRepository conductorRepository;
+    private ConductorRepository conductorRepository;
 
-    public  Optional<Logeo> autenticarUsuario(String correo, String password) {
+    public Optional<Logeo> autenticarUsuario(String correo, String password) {
         // Buscar en la tabla de administradores
         Optional<Administrador> adminOpt = administradorRepository.findByCorreo(correo);
         if (adminOpt.isPresent() && adminOpt.get().getPassword().equals(password)) {

@@ -3,7 +3,6 @@ package com.example.transcaribe.controller;
 import com.example.transcaribe.entity.Administrador;
 import com.example.transcaribe.entity.Conductor;
 import com.example.transcaribe.entity.Usuario;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,18 +21,19 @@ public class Logeo {
 
     public Logeo(Administrador administrador) {
         this.administrador = administrador;
-        this.esAdministrador= true;
-        this.redirect= "redirect:/admin/indexAdm";
+        this.esAdministrador = true;
+        this.redirect = "redirect:/admin/indexAdm";
     }
+
     public Logeo(Usuario usuario) {
         this.usuario = usuario;
-        this.esUsuario= true;
-        this.redirect= "redirect:/perfil";
+        this.esUsuario = true;
+        this.redirect = "redirect:/perfil";
     }
 
     public Logeo(Conductor conductor) {
         this.conductor = conductor;
-        this.esConductor= true;
-        this.redirect= "redirect:/indexConductor";
+        this.esConductor = true;
+        this.redirect = "redirect:/indexConductor";
     }
 }

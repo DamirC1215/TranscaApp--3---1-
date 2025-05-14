@@ -1,14 +1,12 @@
 package com.example.transcaribe.controller;
 
+import com.example.transcaribe.entity.Conductor;
+import com.example.transcaribe.services.ConductorService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import com.example.transcaribe.entity.Conductor;
-import com.example.transcaribe.services.ConductorService;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/conductor")
@@ -26,8 +24,8 @@ public class ConductorViewController {
 
     @PostMapping("/login")
     public String loginConductor(@RequestParam("correo") String correo,
-                                @RequestParam("password") String password,
-                                HttpSession session, Model model) {
+                                 @RequestParam("password") String password,
+                                 HttpSession session, Model model) {
         Conductor conductor = conductorService.buscarPorCorreo(correo);
         if (conductor != null && conductor.getPassword().equals(password)) {
             session.setAttribute("conductorLogueado", conductor);

@@ -1,20 +1,20 @@
 package com.example.transcaribe.services;
-import java.util.Comparator;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.example.transcaribe.entity.Estacion;
 import com.example.transcaribe.entity.Trayecto;
 import com.example.transcaribe.repository.EstacionRepository;
 import com.example.transcaribe.repository.TrayectoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Comparator;
+import java.util.List;
 
 
 @Service
 public class TrayectoService {
 
-     @Autowired
+    @Autowired
     private TrayectoRepository trayectoRepository;
 
     @Autowired
@@ -46,10 +46,10 @@ public class TrayectoService {
 
     public void cambiarEstado(String id) {
         Trayecto trayecto = trayectoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Trayecto no encontrado con ID: " + id));
+                .orElseThrow(() -> new RuntimeException("Trayecto no encontrado con ID: " + id));
         trayecto.setEstado(!trayecto.getEstado()); // Cambia el estado
         trayectoRepository.save(trayecto);
     }
-    
+
 }
 

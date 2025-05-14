@@ -18,5 +18,4 @@ public class Horario {
     private Conductor conductor;
 
 
-
 }

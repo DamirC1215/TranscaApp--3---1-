@@ -1,17 +1,5 @@
 package com.example.transcaribe.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.example.transcaribe.entity.Administrador;
 import com.example.transcaribe.entity.Tarjeta;
 import com.example.transcaribe.entity.Trayecto;
@@ -19,8 +7,13 @@ import com.example.transcaribe.entity.Usuario;
 import com.example.transcaribe.services.AdministradorService;
 import com.example.transcaribe.services.TarjetaService;
 import com.example.transcaribe.services.TrayectoService;
-
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -29,13 +22,13 @@ public class AdministradorViewController {
     private final AdministradorService administradorService;
     private final TarjetaService tarjetaService;
     private final TrayectoService trayectoService;
-    
-        @Autowired
-        public AdministradorViewController(AdministradorService administradorService, TarjetaService tarjetaService, TrayectoService trayectoService) {
-            this.administradorService = administradorService;
-            this.tarjetaService = tarjetaService;   
-            this.trayectoService = trayectoService;
-        }
+
+    @Autowired
+    public AdministradorViewController(AdministradorService administradorService, TarjetaService tarjetaService, TrayectoService trayectoService) {
+        this.administradorService = administradorService;
+        this.tarjetaService = tarjetaService;
+        this.trayectoService = trayectoService;
+    }
 
     @GetMapping("/indexAdm")
     public String mostrarIndex(HttpSession session, Model model) {
@@ -80,19 +73,16 @@ public class AdministradorViewController {
     }
 
     @GetMapping("/visualizar")
-public String mostrarVisualizar(HttpSession session, Model model) {
-    Administrador administrador = (Administrador) session.getAttribute("administradorLogueado");
+    public String mostrarVisualizar(HttpSession session, Model model) {
+        Administrador administrador = (Administrador) session.getAttribute("administradorLogueado");
         if (administrador == null) {
             return "redirect:/admin/loginAdm";
         }
-    List<Tarjeta> tarjetas = tarjetaService.obtenerTodasLasTarjetasConUsuarios();
-    model.addAttribute("administrador", administrador);
-    model.addAttribute("tarjetas", tarjetas);
-    return "visualizar";
-}
-
-
-
+        List<Tarjeta> tarjetas = tarjetaService.obtenerTodasLasTarjetasConUsuarios();
+        model.addAttribute("administrador", administrador);
+        model.addAttribute("tarjetas", tarjetas);
+        return "visualizar";
+    }
 
 
     @GetMapping("/troncales")
@@ -121,17 +111,17 @@ public String mostrarVisualizar(HttpSession session, Model model) {
         return "loginAdm";
     }
 
-    @PostMapping("/loginAdm")        
-        public String login(@RequestParam("correo") String correo, @RequestParam("password") String password, 
+    @PostMapping("/loginAdm")
+    public String login(@RequestParam("correo") String correo, @RequestParam("password") String password,
                         HttpSession session, Model model) {
         Administrador administrador = administradorService.buscarPorCorreo(correo);
         if (administrador != null && administrador.getPassword().equals(password)) {
-            session.setAttribute("administradorLogueado", administrador); 
-            return "redirect:/admin/indexAdm";  
+            session.setAttribute("administradorLogueado", administrador);
+            return "redirect:/admin/indexAdm";
         } else {
             model.addAttribute("error", "Correo o contraseña incorrectos");
             model.addAttribute("administrador", new Administrador());
-            return "loginAdm";  
+            return "loginAdm";
         }
     }
 

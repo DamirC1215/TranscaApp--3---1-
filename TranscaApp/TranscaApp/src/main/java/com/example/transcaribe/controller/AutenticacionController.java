@@ -1,9 +1,9 @@
 package com.example.transcaribe.controller;
 
+import com.example.transcaribe.services.AutenticacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.transcaribe.services.AutenticacionService;
 import java.util.HashMap;
 import java.util.Map;
 
