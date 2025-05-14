@@ -135,11 +135,7 @@ public String mostrarVisualizar(HttpSession session, Model model) {
         }
     }
 
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate(); // Invalidar la sesión
-        return "redirect:/admin/loginAdm"; // Redirigir al login
-    }
+
 }
 
 

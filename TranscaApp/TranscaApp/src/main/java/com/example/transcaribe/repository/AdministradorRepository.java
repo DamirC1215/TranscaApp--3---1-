@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository;
 public interface AdministradorRepository extends MongoRepository<Administrador, String>
 {
     Optional<Administrador> findByCorreo(String correo);
-
+    Optional<Administrador> findByCorreoAndPassword(String correo, String password);
 }

@@ -29,6 +29,9 @@ public class AdministradorService {
     public Administrador buscarPorCorreo(String correo) {
         return administradorRepository.findByCorreo(correo).orElse(null);
     }
+    public Boolean buscarPorCorreoYContraseña(String correo, String password) {
+        return administradorRepository.findByCorreoAndPassword(correo,password).isPresent();
+    }
 
     
     public List<Usuario> obtenerUsuarios() {
@@ -43,6 +46,5 @@ public class AdministradorService {
         trayectoRepository.save(trayecto);
     }
 
-    
 }
 
