@@ -44,7 +44,7 @@ public class TrayectoService {
         return trayectoRepository.findAll();
     }
 
-    public void cambiarEstado(Long id) {
+    public void cambiarEstado(String id) {
         Trayecto trayecto = trayectoRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Trayecto no encontrado con ID: " + id));
         trayecto.setEstado(!trayecto.getEstado()); // Cambia el estado

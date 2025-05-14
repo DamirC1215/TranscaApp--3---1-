@@ -24,7 +24,7 @@ public class HorarioService {
     }
 
     // Eliminar un horario por ID
-    public void eliminarHorario(Long id) {
+    public void eliminarHorario(String id) {
         horarioRepository.deleteById(id);
     }
 }

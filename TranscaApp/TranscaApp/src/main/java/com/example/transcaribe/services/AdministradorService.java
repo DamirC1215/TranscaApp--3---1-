@@ -36,7 +36,7 @@ public class AdministradorService {
     }
 
     
-    public void cambiarEstadoTrayecto(Long trayectoId, boolean Estado) {
+    public void cambiarEstadoTrayecto(String trayectoId, boolean Estado) {
         Trayecto trayecto = trayectoRepository.findById(trayectoId)
             .orElseThrow(() -> new RuntimeException("Trayecto no encontrado"));
         trayecto.setEstado(Estado);

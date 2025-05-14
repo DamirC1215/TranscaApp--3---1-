@@ -1,5 +1,10 @@
 package com.example.transcaribe.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class RecargaDTO {
     private Double monto;
 

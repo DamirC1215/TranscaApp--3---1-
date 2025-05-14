@@ -1,6 +1,5 @@
 package com.example.transcaribe.controller;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -87,9 +86,6 @@ public String procesarCompraTarjeta(HttpSession session, Model model) {
     Tarjeta tarjetaAsignada = tarjetaService.asignarTarjetaExistente(usuario);
     usuario.getTarjetas().add(tarjetaAsignada);
     session.setAttribute("usuarioLogueado", usuario);
-
-    // Inicializar tarjetas
-    Hibernate.initialize(usuario.getTarjetas());
 
     Tarjeta tarjeta = tarjetaService.obtenerTarjetaPorUsuario(usuario.getId());
 

@@ -1,6 +1,5 @@
 package com.example.transcaribe.services;
 
-import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -12,7 +11,6 @@ import com.example.transcaribe.entity.Recarga;
 import com.example.transcaribe.entity.Tarjeta;
 import com.example.transcaribe.entity.Usuario;
 import com.example.transcaribe.repository.TarjetaRepository;
-import com.google.zxing.WriterException;
 
 @Service
 public class TarjetaService {
@@ -24,7 +22,7 @@ public class TarjetaService {
         this.tarjetaRepository = tarjetaRepository;
     }
 
-    public void recargarTarjeta(Long usuarioId, Double monto) {
+    public void recargarTarjeta(String usuarioId, Double monto) {
         Tarjeta tarjeta = tarjetaRepository.findByUsuarioId(usuarioId)
                 .orElseThrow(() -> new IllegalArgumentException("Tarjeta no encontrada"));
     
@@ -34,7 +32,7 @@ public class TarjetaService {
     
 
 
-    public List<Recarga> obtenerHistorialRecargas(Long tarjetaId) {
+    public List<Recarga> obtenerHistorialRecargas(String tarjetaId) {
         Tarjeta tarjeta = tarjetaRepository.findById(tarjetaId)
                 .orElseThrow(() -> new IllegalArgumentException("Tarjeta no encontrada"));
         return tarjeta.getRecargas();
@@ -76,7 +74,7 @@ public Tarjeta asignarTarjetaExistente(Usuario usuario) {
 }
 
 // Obtener la tarjeta asociada a un usuario
-public Tarjeta obtenerTarjetaPorUsuario(Long usuarioId) {
+public Tarjeta obtenerTarjetaPorUsuario(String usuarioId) {
     return tarjetaRepository.findByUsuarioId(usuarioId).orElse(null);
 }
 
@@ -84,7 +82,7 @@ public List<Tarjeta> obtenerTodasLasTarjetasConUsuarios() {
     return tarjetaRepository.findAllWithUsuarios();
 }
 
-public Optional<Tarjeta> obtenerTarjetaPorId(Long tarjetaId) {
+public Optional<Tarjeta> obtenerTarjetaPorId(String tarjetaId) {
     return tarjetaRepository.findById(tarjetaId);
 }
 

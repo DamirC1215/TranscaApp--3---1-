@@ -30,7 +30,7 @@ public class ConductorService {
     }
 
     // 👉 Busca un conductor por ID
-    public Optional<Conductor> buscarPorId(Long id) {
+    public Optional<Conductor> buscarPorId(String id) {
         return conductorRepository.findById(id);
     }
 
@@ -44,12 +44,12 @@ public class ConductorService {
     }
 
     // 👉 Elimina un conductor por ID
-    public void eliminarPorId(Long id) {
+    public void eliminarPorId(String id) {
         conductorRepository.deleteById(id);
     }
 
     // 👉 Método adicional para eliminar conductor (para compatibilidad con el controlador)
-    public void eliminarConductor(Long id) {
+    public void eliminarConductor(String id) {
         eliminarPorId(id);
     }
 }

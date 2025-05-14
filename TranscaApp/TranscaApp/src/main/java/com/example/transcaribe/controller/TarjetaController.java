@@ -67,7 +67,7 @@ public class TarjetaController {
 
     // Endpoint para obtener el historial de recargas de una tarjeta
     @GetMapping("/{tarjetaId}/historial")
-    public ResponseEntity<List<Recarga>> obtenerHistorialRecargas(@PathVariable Long tarjetaId) {
+    public ResponseEntity<List<Recarga>> obtenerHistorialRecargas(@PathVariable String tarjetaId) {
         List<Recarga> historialRecargas = tarjetaService.obtenerHistorialRecargas(tarjetaId);
         return ResponseEntity.ok(historialRecargas);
     }

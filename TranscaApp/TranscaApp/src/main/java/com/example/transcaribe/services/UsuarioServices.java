@@ -19,7 +19,7 @@ public class UsuarioServices {
     }
 
     public boolean existePorEmail(String email) {
-        return usuarioRepository.findByEmail(email) != null;
+        return usuarioRepository.findByEmail(email).isPresent();
     }
 
     public Usuario buscarPorEmail(String email) {

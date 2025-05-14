@@ -108,7 +108,7 @@ public String mostrarVisualizar(HttpSession session, Model model) {
     }
 
     @PostMapping("/cambiar-estado/{id}")
-    public String cambiarEstadoTrayecto(@PathVariable Long id) {
+    public String cambiarEstadoTrayecto(@PathVariable String id) {
         trayectoService.cambiarEstado(id);
         return "redirect:/admin/troncales"; // Redirige para actualizar la tabla
     }
