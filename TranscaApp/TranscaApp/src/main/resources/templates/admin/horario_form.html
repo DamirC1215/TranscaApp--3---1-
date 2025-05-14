@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <h2>Asignar Horario</h2>
+    <form th:action="@{'/admin/conductores/' + ${horario.conductorId} + '/horarios/nuevo'}"
+        th:object="${horario}" method="post">
+    <label>Inicio Jornada: <input type="time" th:field="*{inicioJornada}" required/></label><br/>
+    <label>Inicio Descanso: <input type="time" th:field="*{inicioDescanso}"/></label><br/>
+    <label>Fin Descanso:    <input type="time" th:field="*{finDescanso}"/></label><br/>
+    <label>Fin Jornada:     <input type="time" th:field="*{finJornada}" required/></label><br/>
+    <input th:field="*{numeroTranscaribe}" placeholder="ID Transcaribe" required/><br/>
+    <input th:field="*{rutaAsignada}" placeholder="Ruta" required/><br/>
+    <button type="submit">Guardar Horario</button>
+</form>
+<a th:href="@{/admin/conductores}">← Volver</a>
+</body>
+</html>

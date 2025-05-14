@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <h2 th:text="${conductor.id} == null ? 'Crear Conductor' : 'Editar Conductor'"></h2>
+    <form th:action="@{${conductor.id} == null
+                ? '/admin/conductores/nuevo'
+                : '/admin/conductores/' + ${conductor.id} + '/editar'}"
+        th:object="${conductor}" method="post">
+    <input th:field="*{nombre}" placeholder="Nombre" required/><br/>
+    <input th:field="*{correoElectronico}" placeholder="Email" required/><br/>
+    <input th:field="*{password}" type="password" placeholder="Password" required/><br/>
+    <input th:field="*{licencia}" placeholder="Licencia"/><br/>
+    <button type="submit">Guardar</button>
+    </form>
+    <a th:href="@{/admin/conductores}">← Volver</a>
+</body>
+</html>

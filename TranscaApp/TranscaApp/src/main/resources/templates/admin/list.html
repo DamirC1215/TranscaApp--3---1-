@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<h2>Listado de Conductores</h2>
+<a th:href="@{/admin/conductores/nuevo}">+ Nuevo Conductor</a>
+<table>
+    <thead><tr><th>Nombre</th><th>Email</th><th>Acciones</th></tr></thead>
+    <tbody>
+    <tr th:each="c : ${conductores}">
+        <td th:text="${c.nombre}"></td>
+        <td th:text="${c.correoElectronico}"></td>
+        <td>
+        <a th:href="@{'/admin/conductores/' + ${c.id} + '/editar'}">Editar</a> |
+        <form th:action="@{'/admin/conductores/' + ${c.id} + '/eliminar'}" method="post" style="display:inline">
+            <button type="submit">Eliminar</button>
+        </form> |
+        <a th:href="@{'/admin/conductores/' + ${c.id} + '/horarios/nuevo'}">Asignar Horario</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

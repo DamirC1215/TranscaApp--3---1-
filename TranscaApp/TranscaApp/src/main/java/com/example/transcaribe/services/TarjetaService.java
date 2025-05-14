@@ -48,6 +48,7 @@ public class TarjetaService {
     public List<Tarjeta> obtenerTarjetasUsuario(Usuario usuario) {
         return tarjetaRepository.findAllByUsuarioId(usuario.getId());
     }
+    
 
     // Asignar una tarjeta al azar al usuario
     public Tarjeta asignarTarjetaExistente(Usuario usuario) {

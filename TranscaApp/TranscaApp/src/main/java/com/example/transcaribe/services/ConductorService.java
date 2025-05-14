@@ -2,7 +2,6 @@ package com.example.transcaribe.services;
 
 import com.example.transcaribe.entity.Conductor;
 import com.example.transcaribe.repository.ConductorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,46 +10,70 @@ import java.util.Optional;
 @Service
 public class ConductorService {
 
-    @Autowired
-    private ConductorRepository conductorRepository;
+    private final ConductorRepository repo;
 
-    // 👉 Guarda un nuevo conductor o actualiza uno existente
-    public void guardar(Conductor conductor) {
-        conductorRepository.save(conductor);
+    public ConductorService(ConductorRepository repo) {
+        this.repo = repo;
     }
 
-    // 👉 Método adicional para guardar conductor (para compatibilidad con el controlador)
-    public void guardarConductor(Conductor conductor) {
-        guardar(conductor);
+    /**
+     * Crea un nuevo conductor (lanza IllegalArgumentException si el correo ya existe).
+     */
+    public Conductor crear(Conductor conductor) {
+        if (repo.existsByCorreoElectronico(conductor.getCorreoElectronico())) {
+            throw new IllegalArgumentException(
+                "Ya existe un conductor con correo " + conductor.getCorreoElectronico()
+            );
+        }
+        return repo.save(conductor);
     }
 
-    // 👉 Verifica si existe un conductor por correo
-    public boolean existePorCorreo(String correoElectronico) {
-        return conductorRepository.findByCorreoElectronico(correoElectronico) != null;
+    /**
+     * Actualiza un conductor existente. Lanza IllegalArgumentException si no existe.
+     */
+    public Conductor actualizar(String id, Conductor datos) {
+        Optional<Conductor> opt = repo.findById(id);
+        if (!opt.isPresent()) {
+            throw new IllegalArgumentException("Conductor no encontrado con id: " + id);
+        }
+        Conductor existente = opt.get();
+        existente.setNombre(datos.getNombre());
+        existente.setCorreoElectronico(datos.getCorreoElectronico());
+        existente.setPassword(datos.getPassword());
+        existente.setLicencia(datos.getLicencia());
+        // no cambiamos el campo 'tipo'
+        return repo.save(existente);
     }
 
-    // 👉 Busca un conductor por ID
-    public Optional<Conductor> buscarPorId(String id) {
-        return conductorRepository.findById(id);
-    }
-
-    // 👉 Busca un conductor por correo
-    public Conductor buscarPorCorreo(String correoElectronico) {
-        return conductorRepository.findByCorreoElectronico(correoElectronico).orElse(null);
-    }
-
-    // 👉 Obtiene todos los conductores
+    /**
+     * Obtiene la lista de todos los conductores.
+     */
     public List<Conductor> obtenerTodos() {
-        return conductorRepository.findAll();
+        return repo.findAll();
     }
 
-    // 👉 Elimina un conductor por ID
+    /**
+     * Obtiene un conductor por su ID, o lanza IllegalArgumentException si no existe.
+     */
+    public Conductor obtenerPorId(String id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Conductor no encontrado con id: " + id));
+    }
+
+    /**
+     * Elimina un conductor por ID (lanza IllegalArgumentException si no existe).
+     */
     public void eliminarPorId(String id) {
-        conductorRepository.deleteById(id);
+        if (!repo.existsById(id)) {
+            throw new IllegalArgumentException("Conductor no encontrado con id: " + id);
+        }
+        repo.deleteById(id);
     }
 
-    // 👉 Método adicional para eliminar conductor (para compatibilidad con el controlador)
-    public void eliminarConductor(String id) {
-        eliminarPorId(id);
+    /**
+     * Verifica si ya existe un conductor con ese correo.
+     */
+    public boolean existsByCorreoElectronico(String correoElectronico) {
+        return repo.existsByCorreoElectronico(correoElectronico);
     }
 }
