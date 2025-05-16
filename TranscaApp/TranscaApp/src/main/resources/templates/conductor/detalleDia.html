@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Detalle del Día</title>
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+</head>
+<body id="page-top">
+<div class="container-fluid mt-4">
+
+    <!-- Título y enlace regresar -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 text-gray-800">Detalles del Día: <span th:text="${dia}">Lunes</span></h1>
+        <a th:href="@{/conductor/horario}" class="btn btn-outline-secondary">
+            ← Volver al Horario
+        </a>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            <strong>Información del Turno</strong>
+        </div>
+        <div class="card-body">
+            <!-- Tabla de detalle -->
+            <table class="table table-bordered table-hover">
+                <thead class="thead-light">
+                <tr>
+                    <th>Ruta</th>
+                    <th>Modelo</th>
+                    <th>Placa</th>
+                    <th>Hora de Inicio</th>
+                    <th>Hora de Fin</th>
+                    <th>Minutos de Descanso</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Asumimos un objeto 'detalle' en el model -->
+                <tr>
+                    <td th:text="${detalle.ruta}">T100E</td>
+                    <td th:text="${detalle.modeloVehiculo}">Articulado</td>
+                    <td th:text="${detalle.placa}">ABC-123</td>
+                    <td th:text="${detalle.horaInicio}">06:00</td>
+                    <td th:text="${detalle.horaFin}">14:00</td>
+                    <td th:text="${detalle.descanso}">30</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Opciones adicionales -->
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body text-center">
+                    <i class="fas fa-map-marked-alt fa-2x text-primary mb-2"></i>
+                    <div class="h5 mb-0">Ver Mapa de Ruta</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body text-center">
+                    <i class="fas fa-history fa-2x text-success mb-2"></i>
+                    <div class="h5 mb-0">Historial de Turnos</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body text-center">
+                    <i class="fas fa-comments fa-2x text-info mb-2"></i>
+                    <div class="h5 mb-0">Reportar Incidencia</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/sb-admin-2.min.js}"></script>
+</body>
+</html>

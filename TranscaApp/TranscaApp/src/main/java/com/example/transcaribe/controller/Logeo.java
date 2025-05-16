@@ -32,8 +32,9 @@ public class Logeo {
     }
 
     public Logeo(Conductor conductor) {
-        this.conductor = conductor;
+        this.conductor   = conductor;
         this.esConductor = true;
-        this.redirect = "redirect:/indexConductor";
+        this.redirect    = "redirect:/admin/indexConductor";
+        this.redirect    = "redirect:/conductor/index";
     }
 }

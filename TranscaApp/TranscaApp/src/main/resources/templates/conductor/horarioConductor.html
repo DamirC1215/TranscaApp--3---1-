@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Horario de Trabajo</title>
+    <!-- Si ya incluyes sb-admin-2.min.css en un layout, omite estas líneas -->
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+</head>
+<body id="page-top">
+<div class="container-fluid mt-4">
+
+    <!-- Título y botón de logout -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 text-gray-800">Horario de Trabajo</h1>
+        <a th:href="@{/conductor/index}" class="btn btn-secondary mr-2">
+            ← Volver al panel
+        </a>
+        <a th:href="@{/conductor/logout}" class="btn btn-outline-danger">Cerrar sesión</a>
+    </div>
+
+    <!-- Tarjeta con la tabla semanal -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Día</th>
+                    <th>Inicio Turno</th>
+                    <th>Fin Turno</th>
+                    <th>Descanso</th>
+                    <th>Ruta</th>
+                    <th>ID Transcar</th>
+                    <th>Acción</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Iteramos sobre la lista de turnos que viene del model -->
+                <tr th:each="turno : ${turnos}">
+                    <td th:text="${turno.dia}">Lunes</td>
+                    <td th:text="${turno.horaInicio}">06:00</td>
+                    <td th:text="${turno.horaFin}">14:00</td>
+                    <td th:text="${turno.descanso}">30 min</td>
+                    <td th:text="${turno.ruta}">T100E</td>
+                    <td th:text="${turno.idTranscar}">1234</td>
+                    <td>
+                        <!-- enlace al detalle usando sintaxis Thymeleaf -->
+                        <a th:href="@{/conductor/detalle-dia/{dia}(dia=${turno.dia})}"
+                           class="btn btn-sm btn-primary">
+                            Ver detalle
+                        </a>
+                    </td>
+                </tr>
+                <!-- Mensaje si no hay turnos -->
+                <tr th:if="${#lists.isEmpty(turnos)}">
+                    <td colspan="7" class="text-center text-muted">No hay turnos asignados.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- Scripts de SB-Admin / Bootstrap -->
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/sb-admin-2.min.js}"></script>
+</body>
+</html>

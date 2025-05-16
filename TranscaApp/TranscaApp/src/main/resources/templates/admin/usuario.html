@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuarios</title>
+</head>
+<body>
+<h1>Listado de Usuarios</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombres</th>
+        <th>Apellido</th>
+        <th>Correo</th>
+        <th>Contraseña</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="u : ${usuarios}">
+        <td th:text="${u.id}">1</td>
+        <td th:text="${u.nombres}">Juan</td>
+        <td th:text="${u.apellido}">Pérez</td>
+        <td th:text="${u.email}">juanperez@gmail.com</td>
+        <!-- para evitar problemas con la ñ en 'contraseña' -->
+        <td th:text="${u['contraseña']}">12345</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

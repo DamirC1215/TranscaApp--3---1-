@@ -7,10 +7,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Getter @Setter
 @Document(collection = "trayectos")
-
 public class Trayecto {
 
     @Id
@@ -19,27 +17,25 @@ public class Trayecto {
     private Integer cantidadEstaciones;
     private String tipoVehiculo;
 
-    private boolean estado = true;
-
-    public boolean getEstado() {
-        return estado;
-    }
+    /**
+     * Cambiado a Integer para que encaje con 0/1
+     */
+    private Integer estado = 1;
 
     private Double duracionEstimada;
-
     private List<Estacion> estaciones;
 
+    /**
+     * Nuevo campo para contar las confirmaciones de uso.
+     */
+    private Integer uso = 0;
 
-    public Trayecto() {
+    // constructor vacío, otros getters/setters generados por Lombok
+
+    /**
+     * Método de conveniencia para usarlo como boolean
+     */
+    public boolean isActivo() {
+        return estado != null && estado.equals(1);
     }
-
-    public Trayecto(String nombre, Integer cantidadEstaciones, String tipoVehiculo, Boolean estado, Double duracionEstimada) {
-        this.nombre = nombre;
-        this.cantidadEstaciones = cantidadEstaciones;
-        this.tipoVehiculo = tipoVehiculo;
-        this.estado = estado;
-        this.duracionEstimada = duracionEstimada;
-    }
-
-
 }

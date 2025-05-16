@@ -2,96 +2,64 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Planifica tu Ruta</title>
+    <meta charset="UTF-8" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="/app.js"></script>
     <style>
-
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
-* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-font-family: "Poppins", sans-serif;
-}
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
         header {
-    background-color: white; /* Cambiado a blanco */
-    color: #333;
-    padding: 10px 30px;
-    display: flex;
-    justify-content: space-between; /* Espacio entre el menú y el botón de cerrar sesión */
-    align-items: center;
-    position: relative;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
-.menu-container {
-    flex-grow: 1; /* Ocupa el espacio necesario */
-    display: flex;
-    justify-content: center; /* Centra el menú horizontalmente */
-}
-
-.menu {
-    display: flex;
-    gap: 30px; /* Espacio entre botones */
-    font-size: 1em;
-    
-}
-
-.menu a {
-    text-decoration: none;
-    color: #666; /* Color del texto */
-    padding: 10px 5px; /* Añade padding para agrandar el área de clic */
-    transition: color 0.1s ease, border-bottom 0.1s ease; /* Transiciones suaves */
-}
-
-.menu a:hover, .menu a.active {
-            color: rgb(252, 140, 13);
-        }
-
-.user-menu a {
-    text-decoration: none;
-    color: #666;
-    font-size: 0.9em;
-    padding: 10px 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-}
-
-.user-menu a:hover {
-    background-color: #f0f0f0;
-    border-color: #ff6a00;
-            color: #ff6a00;
-}
-
-.main-container {
+            background-color: white;
+            color: #333;
+            padding: 10px 30px;
             display: flex;
-            height: calc(200px - 50px);
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
         }
-
+        .menu-container { flex-grow: 1; display: flex; justify-content: center; }
+        .menu { display: flex; gap: 30px; font-size: 1em; }
+        .menu a {
+            text-decoration: none;
+            color: #666;
+            padding: 10px 5px;
+            transition: color .1s ease;
+        }
+        .menu a:hover, .menu a.active { color: rgb(252,140,13); }
+        .user-menu a {
+            text-decoration: none;
+            color: #666;
+            font-size: .9em;
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: all .3s ease;
+        }
+        .user-menu a:hover {
+            background-color: #f0f0f0;
+            border-color: #ff6a00;
+            color: #ff6a00;
+        }
+        .main-container { display: flex; }
         .sidebar {
             background-color: white;
             padding: 20px;
-            width: 500px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-
-        .sidebar h3 {
-            color: #ff6600;
-        }
-
-        .sidebar label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .sidebar select, .sidebar input[type="text"] {
+        .sidebar h3 { color: #ff6600; margin-top: 15px; }
+        .sidebar label { display: block; margin-bottom: 5px; }
+        .sidebar select,
+        .sidebar input[type="text"] {
             width: 100%;
-            padding: 5px;
+            padding: 8px;
             margin-bottom: 10px;
         }
-
         .sidebar button {
             background-color: #ff6600;
             color: white;
@@ -99,211 +67,204 @@ font-family: "Poppins", sans-serif;
             padding: 10px;
             width: 100%;
             cursor: pointer;
+            margin-top: 5px;
         }
-        
+        #map { flex-grow: 1; height: 600px; }
+        #nombreRuta { margin: 10px; font-size: 1.5rem; }
     </style>
 </head>
 <body>
-    <header>
-        <div class="menu-container">
-            <div class="menu">
-                <a th:href="@{/perfil}">Perfil</a>
-                <a th:href="@{/mapa}">Mapa</a>
-            </div>
+<header>
+    <div class="menu-container">
+        <div class="menu">
+            <a th:href="@{/perfil}">Perfil</a>
+            <a th:href="@{/mapa}">Mapa</a>
         </div>
-        <div class="user-menu">
-            <a th:href="@{/logout}">Cerrar sesión</a>
-        </div>
-    </header>
-
-    <div class="main-container">
-        <div class="sidebar">
-            <label for="ruta">Selecciona ruta:</label>
-            <select id="trayecto" name="ruta">
-                <option value="">Selecciona una ruta</option>
-            </select>
-    
-            <h3>Estación de Origen</h3>
-            <select id="estacionOrigen" name="estacionOrigen">
-                <option value="">Selecciona una estación</option>
-            </select>
-    
-            <h3>Estación de Destino</h3>
-            <select id="estacionDestino" name="estacionDestino">
-                <option value="">Selecciona una estación</option>
-            </select>
-    
-            <label for="tiempo">Tiempo estimado:</label>
-            <input type="text" id="tiempo" placeholder="00:00" readonly>
-    
-            <button id="buscar" class="button-spacing">Buscar</button>
-
-            
-
-        </div>
-    
-        <div id="nombreRuta" style="margin: 10px; font-size: 1.5rem;"></div>
-    
-        <div id="map" style="width: 100%; height: 600px; border: 1px solid #ccc;"></div>
     </div>
-    
-    <script>
+    <div class="user-menu">
+        <a th:href="@{/logout}">Cerrar sesión</a>
+    </div>
+</header>
 
-        var map = L.map('map').setView([10.415288, -75.527145], 13);
+<div class="main-container">
+    <div class="sidebar">
+        <label for="trayecto">Selecciona ruta:</label>
+        <select id="trayecto" name="ruta">
+            <option value="">Selecciona una ruta</option>
+        </select>
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 18,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-    
-        var origenMarker, destinoMarker;
-    
-        
-        const estaciones = {
-    Portal: { nombre: "Portal", lat: 10.395375250382015, lng: -75.47282157755521 },
-    MadreBernarda: { nombre: "Madre Bernarda", lat: 10.394998122577846, lng: -75.47888350497468 },
-    LaCastellana: { nombre: "La Castellana", lat: 10.39443655563827, lng: -75.48603695070301 },
-    LosEjecutivos: { nombre: "Los Ejecutivos", lat: 10.39958723122991, lng: -75.49375112060407 },
-    LosAngeles: { nombre: "Los Angeles", lat: 10.395092372168165, lng: -75.49030777717864},
-    VillaOlimpica: { nombre: "Villa Olimpica", lat: 10.403561676065204, lng: -75.49702430115134 },
-    CuatroVientos: { nombre: "Cuatro Vientos", lat: 10.406489816354176, lng: -75.5026376591769 },
-    RepublicaDelLibano: { nombre: "Republica del Libano", lat: 10.40735019230311, lng: -75.50754429769734 },
-    España: { nombre: "España", lat: 10.408298277876364, lng: -75.49702430115134 },
-    MariaAuxiliadora: { nombre: "Maria Auxiliadora", lat: 10.409010073738633, lng: -75.51579606322234 },
-    ElPrado: { nombre: "El Prado", lat: 10.411166290718123, lng: -75.5196630329416 },
-    Bazurto: { nombre: "Bazurto", lat: 10.413755819173309, lng: -75.52399080758812 },
-    LaPopa: { nombre: "La Popa", lat: 10.420479554272056, lng: -75.53103771121845},
-    Chambacu: { nombre: "Chambacu", lat: 10.425870288879318, lng: -75.5404398869465 },
-    Centro: { nombre: "Centro", lat: 10.425014372802972, lng: -75.54669740129546 },
-    LaBodeguita: { nombre: "La Bodeguita", lat: 10.419833781925286, lng: -75.55168305770621 },
-};
+        <h3>Estación de Origen</h3>
+        <select id="estacionOrigen" name="estacionOrigen">
+            <option value="">Selecciona una estación</option>
+        </select>
 
-const rutas = [
-    {
-        id: 1,
-        nombre: "T100E Portal-Centro",
-        estaciones: [
-            estaciones.Portal,
-            estaciones.MadreBernarda,
-            estaciones.LaCastellana,
-            estaciones.CuatroVientos,
-            estaciones.MariaAuxiliadora,
-            estaciones.Centro,
-            estaciones.LaBodeguita,
-        ],
-    },
-    {
-        id: 2,
-        nombre: "T101 Portal-Centro",
-        estaciones: [
-            estaciones.Portal,
-            estaciones.MadreBernarda,
-            estaciones.LaCastellana,
-            estaciones.LosEjecutivos,
-            estaciones.VillaOlimpica,
-            estaciones.CuatroVientos,
-            estaciones.España,
-            estaciones.ElPrado,
-            estaciones.Bazurto,
-            estaciones.LaPopa,
-            estaciones.Chambacu,
-            estaciones.Centro,
-            estaciones.LaBodeguita,
-        ],
-    },
+        <h3>Estación de Destino</h3>
+        <select id="estacionDestino" name="estacionDestino">
+            <option value="">Selecciona una estación</option>
+        </select>
 
-    {
-        id: 3,
-        nombre: "T102 Portal-Crespo",
-        estaciones: [
-            estaciones.Portal,
-            estaciones.MadreBernarda,
-            estaciones.LosAngeles,
-            estaciones.VillaOlimpica,
-            estaciones.RepublicaDelLibano,
-            estaciones.MariaAuxiliadora,
-            estaciones.ElPrado,
-            estaciones.Bazurto,
-            estaciones.Chambacu,
-            estaciones.Centro,
-            estaciones.LaBodeguita,
-        ],
-    },
+        <label for="tiempo">Tiempo estimado:</label>
+        <input type="text" id="tiempo" placeholder="00:00" readonly>
 
-    {
-        id: 4,
-        nombre: "T103 Portal-Bocagrande",
-        estaciones: [
-            estaciones.Portal,
-            estaciones.MadreBernarda,
-            estaciones.LaCastellana,
-            estaciones.LosEjecutivos,
-            estaciones.LosAngeles,
-            estaciones.CuatroVientos,
-            estaciones.España,
-            estaciones.Bazurto,
-            estaciones.LaPopa,
-            estaciones.Chambacu,
-            estaciones.LaBodeguita,
-        ],
-    },
-];
+        <button id="buscar">Buscar</button>
 
-    
-        const trayectoSelect = document.getElementById('trayecto');
-        const estacionOrigenSelect = document.getElementById('estacionOrigen');
-        const estacionDestinoSelect = document.getElementById('estacionDestino');
-        const tiempoInput = document.getElementById('tiempo');
-        const nombreRutaDiv = document.getElementById('nombreRuta');
-    
-        rutas.forEach(ruta => {
-            const option = document.createElement('option');
-            option.value = ruta.id;
-            option.textContent = ruta.nombre;
-            trayectoSelect.appendChild(option);
-        });
-    
-        trayectoSelect.addEventListener('change', (e) => {
-            const rutaSeleccionada = rutas.find(ruta => ruta.id == e.target.value);
-            estacionOrigenSelect.innerHTML = '<option value="">Selecciona una estación</option>';
-            estacionDestinoSelect.innerHTML = '<option value="">Selecciona una estación</option>';
-            
-    
-            if (rutaSeleccionada) {
-                rutaSeleccionada.estaciones.forEach(estacion => {
-                    const option = document.createElement('option');
-                    option.value = JSON.stringify(estacion);
-                    option.textContent = estacion.nombre;
-                    estacionOrigenSelect.appendChild(option);
-                    estacionDestinoSelect.appendChild(option.cloneNode(true));
-                });
-            }
-        });
-      document.getElementById('buscar').addEventListener('click', () => {
-            const origenData = estacionOrigenSelect.value;
-            const destinoData = estacionDestinoSelect.value;
-    
-            if (!origenData || !destinoData) {
-                alert('Por favor, selecciona una estación de origen y destino.');
-                return;
-            }
-    
-            const origen = JSON.parse(origenData);
-            const destino = JSON.parse(destinoData);
-    
-            if (origenMarker) map.removeLayer(origenMarker);
-            if (destinoMarker) map.removeLayer(destinoMarker);
-    
-            origenMarker = L.marker([origen.lat, origen.lng]).bindPopup(`Origen: ${origen.nombre}`).addTo(map);
-            destinoMarker = L.marker([destino.lat, destino.lng]).bindPopup(`Destino: ${destino.nombre}`).addTo(map);
-    
-            const bounds = L.latLngBounds([origenMarker.getLatLng(), destinoMarker.getLatLng()]);
-            map.fitBounds(bounds);
-    
-            tiempoInput.value = `${Math.round(Math.random() * 20 + 5)} min`;
-        });
-    </script>
-    
-    
+        <!-- Formulario para confirmar la ruta (sin CSRF) -->
+        <form th:action="@{/ruta/confirmar}" method="post" id="formConfirmar">
+            <input type="hidden" name="rutaId"  id="rutaIdHidden" />
+            <input type="hidden" name="origen"  id="origenHidden" />
+            <input type="hidden" name="destino" id="destinoHidden" />
+            <button type="submit" id="confirmar" disabled>Confirmar ruta</button>
+        </form>
+    </div>
+
+    <div id="map"></div>
+</div>
+
+<div id="nombreRuta"></div>
+
+<script>
+    // Inicializa el mapa
+    const map = L.map('map').setView([10.415288, -75.527145], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    let origenMarker, destinoMarker;
+
+    // Datos de estaciones y rutas
+    const estaciones = {
+        Portal: { nombre: "Portal", lat: 10.395375, lng: -75.472822 },
+        MadreBernarda: { nombre: "Madre Bernarda", lat: 10.394998, lng: -75.478884 },
+        LaCastellana: { nombre: "La Castellana", lat: 10.394437, lng: -75.486037 },
+        LosEjecutivos: { nombre: "Los Ejecutivos", lat: 10.399587, lng: -75.493751 },
+        LosAngeles: { nombre: "Los Angeles", lat: 10.395092, lng: -75.490308 },
+        VillaOlimpica: { nombre: "Villa Olimpica", lat: 10.403562, lng: -75.497024 },
+        CuatroVientos: { nombre: "Cuatro Vientos", lat: 10.406490, lng: -75.502638 },
+        RepublicaDelLibano: { nombre: "Republica del Libano", lat: 10.407350, lng: -75.507544 },
+        España: { nombre: "España", lat: 10.408298, lng: -75.497024 },
+        MariaAuxiliadora: { nombre: "Maria Auxiliadora", lat: 10.409010, lng: -75.515796 },
+        ElPrado: { nombre: "El Prado", lat: 10.411166, lng: -75.519663 },
+        Bazurto: { nombre: "Bazurto", lat: 10.413756, lng: -75.523991 },
+        LaPopa: { nombre: "La Popa", lat: 10.420480, lng: -75.531038 },
+        Chambacu: { nombre: "Chambacu", lat: 10.425870, lng: -75.540440 },
+        Centro: { nombre: "Centro", lat: 10.425014, lng: -75.546697 },
+        LaBodeguita: { nombre: "La Bodeguita", lat: 10.419834, lng: -75.551683 }
+    };
+
+    const rutas = [
+        {
+            id: 1,
+            nombre: "T100E Portal-Centro",
+            estaciones: [
+                estaciones.Portal, estaciones.MadreBernarda, estaciones.LaCastellana,
+                estaciones.CuatroVientos, estaciones.MariaAuxiliadora,
+                estaciones.Centro, estaciones.LaBodeguita
+            ]
+        },
+        {
+            id: 2,
+            nombre: "T101 Portal-Centro",
+            estaciones: [
+                estaciones.Portal, estaciones.MadreBernarda, estaciones.LaCastellana,
+                estaciones.LosEjecutivos, estaciones.VillaOlimpica, estaciones.CuatroVientos,
+                estaciones.España, estaciones.ElPrado, estaciones.Bazurto,
+                estaciones.LaPopa, estaciones.Chambacu, estaciones.Centro,
+                estaciones.LaBodeguita
+            ]
+        },
+        {
+            id: 3,
+            nombre: "T102 Portal-Crespo",
+            estaciones: [
+                estaciones.Portal, estaciones.MadreBernarda, estaciones.LosAngeles,
+                estaciones.VillaOlimpica, estaciones.RepublicaDelLibano,
+                estaciones.MariaAuxiliadora, estaciones.ElPrado, estaciones.Bazurto,
+                estaciones.Chambacu, estaciones.Centro, estaciones.LaBodeguita
+            ]
+        },
+        {
+            id: 4,
+            nombre: "T103 Portal-Bocagrande",
+            estaciones: [
+                estaciones.Portal, estaciones.MadreBernarda, estaciones.LaCastellana,
+                estaciones.LosEjecutivos, estaciones.LosAngeles, estaciones.CuatroVientos,
+                estaciones.España, estaciones.Bazurto, estaciones.LaPopa,
+                estaciones.Chambacu, estaciones.LaBodeguita
+            ]
+        }
+    ];
+
+    // Referencias DOM
+    const trayectoSelect      = document.getElementById('trayecto');
+    const estacionOrigenSel   = document.getElementById('estacionOrigen');
+    const estacionDestinoSel  = document.getElementById('estacionDestino');
+    const tiempoInput         = document.getElementById('tiempo');
+    const btnBuscar           = document.getElementById('buscar');
+    const btnConfirmar        = document.getElementById('confirmar');
+    const rutaIdHidden        = document.getElementById('rutaIdHidden');
+    const origenHidden        = document.getElementById('origenHidden');
+    const destinoHidden       = document.getElementById('destinoHidden');
+
+    // Rellenar opciones de rutas
+    rutas.forEach(r => {
+        const opt = document.createElement('option');
+        opt.value = r.id;
+        opt.textContent = r.nombre;
+        trayectoSelect.appendChild(opt);
+    });
+
+    // Al cambiar ruta, cargar estaciones
+    trayectoSelect.addEventListener('change', e => {
+        const ruta = rutas.find(r => r.id == e.target.value);
+        estacionOrigenSel.innerHTML = '<option value="">Selecciona una estación</option>';
+        estacionDestinoSel.innerHTML = '<option value="">Selecciona una estación</option>';
+        if (ruta) {
+            ruta.estaciones.forEach(est => {
+                const o1 = document.createElement('option');
+                o1.value = JSON.stringify(est);
+                o1.textContent = est.nombre;
+                estacionOrigenSel.appendChild(o1);
+                estacionDestinoSel.appendChild(o1.cloneNode(true));
+            });
+        }
+        btnConfirmar.disabled = true;
+        tiempoInput.value = '';
+    });
+
+    // Botón Buscar
+    btnBuscar.addEventListener('click', () => {
+        const origenData  = estacionOrigenSel.value;
+        const destinoData = estacionDestinoSel.value;
+        if (!origenData || !destinoData) {
+            alert('Por favor, selecciona origen y destino.');
+            return;
+        }
+        const origen  = JSON.parse(origenData);
+        const destino = JSON.parse(destinoData);
+
+        // Limpiar marcadores previos
+        if (origenMarker)  map.removeLayer(origenMarker);
+        if (destinoMarker) map.removeLayer(destinoMarker);
+
+        // Añadir nuevos marcadores
+        origenMarker  = L.marker([origen.lat, origen.lng]).addTo(map)
+                         .bindPopup(`Origen: ${origen.nombre}`);
+        destinoMarker = L.marker([destino.lat, destino.lng]).addTo(map)
+                         .bindPopup(`Destino: ${destino.nombre}`);
+
+        map.fitBounds([origenMarker.getLatLng(), destinoMarker.getLatLng()]);
+
+        // Simular tiempo
+        tiempoInput.value = `${Math.round(Math.random()*20+5)} min`;
+
+        // Preparar confirmación
+        const rutaSel = rutas.find(r => r.id == trayectoSelect.value);
+        rutaIdHidden.value  = rutaSel.id;
+        origenHidden.value  = origenData;
+        destinoHidden.value = destinoData;
+        btnConfirmar.disabled = false;
+    });
+</script>
 </body>
 </html>

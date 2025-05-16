@@ -24,108 +24,103 @@ public class AdministradorViewController {
     private final TrayectoService trayectoService;
 
     @Autowired
-    public AdministradorViewController(AdministradorService administradorService, TarjetaService tarjetaService, TrayectoService trayectoService) {
+    public AdministradorViewController(AdministradorService administradorService,
+                                       TarjetaService tarjetaService,
+                                       TrayectoService trayectoService) {
         this.administradorService = administradorService;
-        this.tarjetaService = tarjetaService;
-        this.trayectoService = trayectoService;
+        this.tarjetaService       = tarjetaService;
+        this.trayectoService      = trayectoService;
     }
 
     @GetMapping("/indexAdm")
     public String mostrarIndex(HttpSession session, Model model) {
-        Administrador administrador = (Administrador) session.getAttribute("administradorLogueado");
-        if (administrador == null) {
+        Administrador admin = (Administrador) session.getAttribute("administradorLogueado");
+        if (admin == null) {
             return "redirect:/admin/loginAdm";
         }
-        model.addAttribute("administrador", administrador);
-        return "indexAdm";
+        model.addAttribute("administrador", admin);
+        return "admin/indexAdm";
     }
 
     @GetMapping("/usuario")
     public String mostrarUsuario(HttpSession session, Model model) {
-        Administrador administrador = (Administrador) session.getAttribute("administradorLogueado");
-        if (administrador == null) {
+        Administrador admin = (Administrador) session.getAttribute("administradorLogueado");
+        if (admin == null) {
             return "redirect:/admin/loginAdm";
         }
         List<Usuario> usuarios = administradorService.obtenerUsuarios();
-        model.addAttribute("administrador", administrador);
+        model.addAttribute("administrador", admin);
         model.addAttribute("usuarios", usuarios);
-        return "usuario";
+        return "admin/usuario";
     }
 
     @GetMapping("/creacion")
     public String mostrarCreacion(HttpSession session, Model model) {
-        Administrador administrador = (Administrador) session.getAttribute("administradorLogueado");
-        if (administrador == null) {
+        Administrador admin = (Administrador) session.getAttribute("administradorLogueado");
+        if (admin == null) {
             return "redirect:/admin/loginAdm";
         }
         List<Tarjeta> tarjetas = tarjetaService.obtenerTarjetasSinUsuario();
-        model.addAttribute("administrador", administrador);
-        model.addAttribute("tarjetas", tarjetas); // Añadir lista de tarjetas al modelo
-        model.addAttribute("nuevaTarjeta", new Tarjeta()); // Añadir un objeto tarjeta vacío para el formulario
-        return "creacion";
+        model.addAttribute("administrador", admin);
+        model.addAttribute("tarjetas", tarjetas);
+        model.addAttribute("nuevaTarjeta", new Tarjeta());
+        return "admin/creacion";
     }
 
     @PostMapping("/crear-tarjeta")
     public String crearTarjeta(@ModelAttribute("nuevaTarjeta") Tarjeta tarjeta) {
-        // Crear la tarjeta en la base de datos
         tarjetaService.crearTarjeta(tarjeta);
-        return "redirect:/admin/creacion"; // Redirige de nuevo a la vista de creación
+        return "redirect:/admin/creacion";
     }
 
     @GetMapping("/visualizar")
     public String mostrarVisualizar(HttpSession session, Model model) {
-        Administrador administrador = (Administrador) session.getAttribute("administradorLogueado");
-        if (administrador == null) {
+        Administrador admin = (Administrador) session.getAttribute("administradorLogueado");
+        if (admin == null) {
             return "redirect:/admin/loginAdm";
         }
-        List<Tarjeta> tarjetas = tarjetaService.obtenerTodasLasTarjetasConUsuarios();
-        model.addAttribute("administrador", administrador);
-        model.addAttribute("tarjetas", tarjetas);
-        return "visualizar";
+        model.addAttribute("administrador", admin);
+        model.addAttribute("tarjetas", tarjetaService.obtenerTodasLasTarjetasConUsuarios());
+        return "admin/visualizar";
     }
-
 
     @GetMapping("/troncales")
     public String mostrarTrayectos(HttpSession session, Model model) {
-        Administrador administrador = (Administrador) session.getAttribute("administradorLogueado");
-        if (administrador == null) {
+        Administrador admin = (Administrador) session.getAttribute("administradorLogueado");
+        if (admin == null) {
             return "redirect:/admin/loginAdm";
         }
         List<Trayecto> trayectos = trayectoService.obtenerTodosLosTrayectos();
-        model.addAttribute("administrador", administrador);
+        model.addAttribute("administrador", admin);
         model.addAttribute("trayectos", trayectos);
-        return "troncales"; // Plantilla Thymeleaf para mostrar los trayectos
+        return "admin/troncales";
     }
 
     @PostMapping("/cambiar-estado/{id}")
     public String cambiarEstadoTrayecto(@PathVariable String id) {
+        // Invocamos el método que definiste en TrayectoService:
         trayectoService.cambiarEstado(id);
-        return "redirect:/admin/troncales"; // Redirige para actualizar la tabla
+        return "redirect:/admin/troncales";
     }
-
 
     @GetMapping("/loginAdm")
     public String irLogin(Model model) {
-        Administrador administrador = new Administrador();
-        model.addAttribute("administrador", administrador);
-        return "loginAdm";
+        model.addAttribute("administrador", new Administrador());
+        return "admin/loginAdm";
     }
 
     @PostMapping("/loginAdm")
-    public String login(@RequestParam("correo") String correo, @RequestParam("password") String password,
-                        HttpSession session, Model model) {
-        Administrador administrador = administradorService.buscarPorCorreo(correo);
-        if (administrador != null && administrador.getPassword().equals(password)) {
-            session.setAttribute("administradorLogueado", administrador);
+    public String login(@RequestParam String correo,
+                        @RequestParam String password,
+                        HttpSession session,
+                        Model model) {
+        Administrador admin = administradorService.buscarPorCorreo(correo);
+        if (admin != null && admin.getPassword().equals(password)) {
+            session.setAttribute("administradorLogueado", admin);
             return "redirect:/admin/indexAdm";
-        } else {
-            model.addAttribute("error", "Correo o contraseña incorrectos");
-            model.addAttribute("administrador", new Administrador());
-            return "loginAdm";
         }
+        model.addAttribute("error", "Correo o contraseña incorrectos");
+        model.addAttribute("administrador", new Administrador());
+        return "admin/loginAdm";
     }
-
-
 }
-
-

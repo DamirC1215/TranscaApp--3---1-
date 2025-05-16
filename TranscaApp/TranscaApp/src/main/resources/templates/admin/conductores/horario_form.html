@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Asignar Horario</title>
+</head>
+<body>
+<h2>Asignar Horario</h2>
+<form th:action="@{|/admin/conductores/${conductorId}/horarios/nuevo|}"
+      th:object="${horario}" method="post">
+
+    <!-- oculto para que Spring lo enlace a horario.conductorId -->
+    <input type="hidden" th:field="*{conductorId}" th:value="${conductorId}" />
+
+    <label>Inicio Jornada:</label>
+    <input type="datetime-local" th:field="*{inicioJornada}" required/><br/>
+
+    <label>Inicio Descanso:</label>
+    <input type="datetime-local" th:field="*{inicioDescanso}" required/><br/>
+
+    <label>Fin Descanso:</label>
+    <input type="datetime-local" th:field="*{finDescanso}" required/><br/>
+
+    <label>Fin Jornada:</label>
+    <input type="datetime-local" th:field="*{finJornada}" required/><br/>
+
+    <label>ID Transcaribe:</label>
+    <input type="number" th:field="*{numeroTranscaribe}" placeholder="ID Transcaribe" required/><br/>
+
+    <label>Ruta Asignada:</label>
+    <input type="text" th:field="*{rutaAsignada}" placeholder="Ruta" required/><br/>
+
+    <button type="submit">Guardar Horario</button>
+</form>
+<a th:href="@{/admin/conductores}">← Volver</a>
+</body>
+</html>
