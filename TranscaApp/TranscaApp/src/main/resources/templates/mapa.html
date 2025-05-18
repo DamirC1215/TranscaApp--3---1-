@@ -45,7 +45,9 @@
             border-color: #ff6a00;
             color: #ff6a00;
         }
-        .main-container { display: flex; }
+        .main-container {
+            display: flex;
+        }
         .sidebar {
             background-color: white;
             padding: 20px;
@@ -68,9 +70,61 @@
             width: 100%;
             cursor: pointer;
             margin-top: 5px;
+            font-weight: 600;
         }
-        #map { flex-grow: 1; height: 600px; }
-        #nombreRuta { margin: 10px; font-size: 1.5rem; }
+        #map {
+            flex-grow: 1;
+            height: 600px;
+        }
+        #nombreRuta {
+            margin: 10px;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        /* Modal styles with your palette */
+        #modalConfirmacion {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        #modalContent {
+            background: white;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+        }
+        #modalContent h2 {
+            margin-bottom: 15px;
+            color: #ff6600;
+        }
+        #modalContent p {
+            margin-bottom: 20px;
+            color: #333;
+            line-height: 1.4;
+        }
+        #modalContent button {
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: 700;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        #modalContent button:hover {
+            background-color: #e55a00;
+        }
     </style>
 </head>
 <body>
@@ -88,7 +142,7 @@
 
 <div class="main-container">
     <div class="sidebar">
-        <label for="trayecto">Selecciona ruta:</label>
+        <label for="ruta">Selecciona ruta:</label>
         <select id="trayecto" name="ruta">
             <option value="">Selecciona una ruta</option>
         </select>
@@ -107,14 +161,7 @@
         <input type="text" id="tiempo" placeholder="00:00" readonly>
 
         <button id="buscar">Buscar</button>
-
-        <!-- Formulario para confirmar la ruta (sin CSRF) -->
-        <form th:action="@{/ruta/confirmar}" method="post" id="formConfirmar">
-            <input type="hidden" name="rutaId"  id="rutaIdHidden" />
-            <input type="hidden" name="origen"  id="origenHidden" />
-            <input type="hidden" name="destino" id="destinoHidden" />
-            <button type="submit" id="confirmar" disabled>Confirmar ruta</button>
-        </form>
+        <button id="confirmarRuta" disabled>Confirmar Ruta</button>
     </div>
 
     <div id="map"></div>
@@ -122,8 +169,16 @@
 
 <div id="nombreRuta"></div>
 
+<!-- Modal Confirmacion -->
+<div id="modalConfirmacion">
+    <div id="modalContent">
+        <h2>Confirmación de ruta</h2>
+        <p id="textoConfirmacion"></p>
+        <button id="btnAceptar">Aceptar</button>
+    </div>
+</div>
+
 <script>
-    // Inicializa el mapa
     const map = L.map('map').setView([10.415288, -75.527145], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
@@ -131,8 +186,9 @@
     }).addTo(map);
 
     let origenMarker, destinoMarker;
+    let rutaPolyline = null;       // Para la línea azul
+    let estacionesMarkers = [];    // Para marcadores de estaciones intermedias
 
-    // Datos de estaciones y rutas
     const estaciones = {
         Portal: { nombre: "Portal", lat: 10.395375, lng: -75.472822 },
         MadreBernarda: { nombre: "Madre Bernarda", lat: 10.394998, lng: -75.478884 },
@@ -195,18 +251,23 @@
         }
     ];
 
-    // Referencias DOM
-    const trayectoSelect      = document.getElementById('trayecto');
-    const estacionOrigenSel   = document.getElementById('estacionOrigen');
-    const estacionDestinoSel  = document.getElementById('estacionDestino');
-    const tiempoInput         = document.getElementById('tiempo');
-    const btnBuscar           = document.getElementById('buscar');
-    const btnConfirmar        = document.getElementById('confirmar');
-    const rutaIdHidden        = document.getElementById('rutaIdHidden');
-    const origenHidden        = document.getElementById('origenHidden');
-    const destinoHidden       = document.getElementById('destinoHidden');
+    // Elementos del DOM
+    const trayectoSelect = document.getElementById('trayecto');
+    const estacionOrigenSel = document.getElementById('estacionOrigen');
+    const estacionDestinoSel = document.getElementById('estacionDestino');
+    const tiempoInput = document.getElementById('tiempo');
+    const confirmarBtn = document.getElementById('confirmarRuta');
+    const modal = document.getElementById('modalConfirmacion');
+    const textoConfirmacion = document.getElementById('textoConfirmacion');
+    const btnAceptar = document.getElementById('btnAceptar');
 
-    // Rellenar opciones de rutas
+    // Variables de selección
+    let rutaSeleccionada = null;
+    let origenSeleccionado = null;
+    let destinoSeleccionado = null;
+    let tiempoEstimado = null;
+
+    // Carga opciones rutas
     rutas.forEach(r => {
         const opt = document.createElement('option');
         opt.value = r.id;
@@ -214,13 +275,32 @@
         trayectoSelect.appendChild(opt);
     });
 
-    // Al cambiar ruta, cargar estaciones
+    // Al cambiar ruta cargar estaciones
     trayectoSelect.addEventListener('change', e => {
-        const ruta = rutas.find(r => r.id == e.target.value);
+        rutaSeleccionada = rutas.find(r => r.id == e.target.value);
         estacionOrigenSel.innerHTML = '<option value="">Selecciona una estación</option>';
         estacionDestinoSel.innerHTML = '<option value="">Selecciona una estación</option>';
-        if (ruta) {
-            ruta.estaciones.forEach(est => {
+        tiempoInput.value = '';
+        confirmarBtn.disabled = true;
+
+        // Limpiar mapa al cambiar ruta
+        if (origenMarker) {
+            map.removeLayer(origenMarker);
+            origenMarker = null;
+        }
+        if (destinoMarker) {
+            map.removeLayer(destinoMarker);
+            destinoMarker = null;
+        }
+        if (rutaPolyline) {
+            map.removeLayer(rutaPolyline);
+            rutaPolyline = null;
+        }
+        estacionesMarkers.forEach(m => map.removeLayer(m));
+        estacionesMarkers = [];
+
+        if (rutaSeleccionada) {
+            rutaSeleccionada.estaciones.forEach(est => {
                 const o1 = document.createElement('option');
                 o1.value = JSON.stringify(est);
                 o1.textContent = est.nombre;
@@ -228,42 +308,102 @@
                 estacionDestinoSel.appendChild(o1.cloneNode(true));
             });
         }
-        btnConfirmar.disabled = true;
-        tiempoInput.value = '';
     });
 
     // Botón Buscar
-    btnBuscar.addEventListener('click', () => {
-        const origenData  = estacionOrigenSel.value;
+    document.getElementById('buscar').addEventListener('click', () => {
+        const origenData = estacionOrigenSel.value;
         const destinoData = estacionDestinoSel.value;
         if (!origenData || !destinoData) {
             alert('Por favor, selecciona origen y destino.');
             return;
         }
-        const origen  = JSON.parse(origenData);
-        const destino = JSON.parse(destinoData);
+        origenSeleccionado = JSON.parse(origenData);
+        destinoSeleccionado = JSON.parse(destinoData);
 
-        // Limpiar marcadores previos
-        if (origenMarker)  map.removeLayer(origenMarker);
+        // Eliminar marcadores previos de origen y destino
+        if (origenMarker) map.removeLayer(origenMarker);
         if (destinoMarker) map.removeLayer(destinoMarker);
 
-        // Añadir nuevos marcadores
-        origenMarker  = L.marker([origen.lat, origen.lng]).addTo(map)
-                         .bindPopup(`Origen: ${origen.nombre}`);
-        destinoMarker = L.marker([destino.lat, destino.lng]).addTo(map)
-                         .bindPopup(`Destino: ${destino.nombre}`);
+        // Eliminar línea previa y marcadores intermedios si existen
+        if (rutaPolyline) {
+            map.removeLayer(rutaPolyline);
+            rutaPolyline = null;
+        }
+        estacionesMarkers.forEach(m => map.removeLayer(m));
+        estacionesMarkers = [];
 
-        map.fitBounds([origenMarker.getLatLng(), destinoMarker.getLatLng()]);
+        // Agregar marcadores origen y destino
+        origenMarker = L.marker([origenSeleccionado.lat, origenSeleccionado.lng]).addTo(map)
+            .bindPopup(`Origen: ${origenSeleccionado.nombre}`).openPopup();
+        destinoMarker = L.marker([destinoSeleccionado.lat, destinoSeleccionado.lng]).addTo(map)
+            .bindPopup(`Destino: ${destinoSeleccionado.nombre}`).openPopup();
 
-        // Simular tiempo
-        tiempoInput.value = `${Math.round(Math.random()*20+5)} min`;
+        // Obtener indices de origen y destino en la ruta para saber qué estaciones recorrer
+        let origenIdx = rutaSeleccionada.estaciones.findIndex(e => e.nombre === origenSeleccionado.nombre);
+        let destinoIdx = rutaSeleccionada.estaciones.findIndex(e => e.nombre === destinoSeleccionado.nombre);
+        if (origenIdx > destinoIdx) [origenIdx, destinoIdx] = [destinoIdx, origenIdx];
 
-        // Preparar confirmación
-        const rutaSel = rutas.find(r => r.id == trayectoSelect.value);
-        rutaIdHidden.value  = rutaSel.id;
-        origenHidden.value  = origenData;
-        destinoHidden.value = destinoData;
-        btnConfirmar.disabled = false;
+        // Construir array con coordenadas para la línea y marcar estaciones intermedias
+        const latlngs = [];
+        for (let i = origenIdx; i <= destinoIdx; i++) {
+            const est = rutaSeleccionada.estaciones[i];
+            latlngs.push([est.lat, est.lng]);
+
+            // No agregar marcador para origen y destino, sólo para intermedias
+            if (i !== origenIdx && i !== destinoIdx) {
+                const marker = L.circleMarker([est.lat, est.lng], {
+                    radius: 6,
+                    color: 'blue',
+                    fillColor: 'blue',
+                    fillOpacity: 0.7
+                }).addTo(map).bindPopup(est.nombre);
+                estacionesMarkers.push(marker);
+            }
+        }
+
+        // Dibujar la línea azul que une las estaciones
+        rutaPolyline = L.polyline(latlngs, { color: 'blue', weight: 5, opacity: 0.7 }).addTo(map);
+
+        // Ajustar vista para que se vea toda la ruta con margen
+        const boundsRuta = L.latLngBounds(latlngs);
+        map.fitBounds(boundsRuta.pad(0.3));
+
+        // Calcular tiempo estimado (simulado)
+        tiempoEstimado = `${Math.round(Math.random() * 20 + 5)} min`;
+        tiempoInput.value = tiempoEstimado;
+
+        confirmarBtn.disabled = false;
+    });
+
+    // Botón Confirmar Ruta
+    confirmarBtn.addEventListener('click', () => {
+        if (!rutaSeleccionada || !origenSeleccionado || !destinoSeleccionado) {
+            alert('Completa la selección antes de confirmar la ruta.');
+            return;
+        }
+        const estacionesRuta = [];
+        let origenIdx = rutaSeleccionada.estaciones.findIndex(e => e.nombre === origenSeleccionado.nombre);
+        let destinoIdx = rutaSeleccionada.estaciones.findIndex(e => e.nombre === destinoSeleccionado.nombre);
+        if (origenIdx > destinoIdx) [origenIdx, destinoIdx] = [destinoIdx, origenIdx];
+
+        for (let i = origenIdx; i <= destinoIdx; i++) {
+            estacionesRuta.push(rutaSeleccionada.estaciones[i].nombre);
+        }
+
+        textoConfirmacion.innerHTML = `
+            Has escogido la ruta <strong>${rutaSeleccionada.nombre}</strong>.<br>
+            Las estaciones que recorrerás son:<br> ${estacionesRuta.join(', ')}.<br>
+            Tiempo estimado: <strong>${tiempoEstimado}</strong>.<br><br>
+            ¡Buen viaje!
+        `;
+        modal.style.display = 'flex';
+    });
+
+    // Botón Aceptar en modal
+    btnAceptar.addEventListener('click', () => {
+        modal.style.display = 'none';
+        window.location.href = '/';
     });
 </script>
 </body>
