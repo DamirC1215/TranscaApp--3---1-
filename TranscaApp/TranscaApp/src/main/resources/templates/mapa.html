@@ -6,6 +6,7 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
+        /* ... tu CSS aquí (igual que antes) ... */
         @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
         * {
             margin: 0;
@@ -81,8 +82,6 @@
             font-size: 1.5rem;
             color: #333;
         }
-
-        /* Modal styles with your palette */
         #modalConfirmacion {
             position: fixed;
             top: 0; left: 0;
@@ -186,8 +185,8 @@
     }).addTo(map);
 
     let origenMarker, destinoMarker;
-    let rutaPolyline = null;       // Para la línea azul
-    let estacionesMarkers = [];    // Para marcadores de estaciones intermedias
+    let rutaPolyline = null;
+    let estacionesMarkers = [];
 
     const estaciones = {
         Portal: { nombre: "Portal", lat: 10.395375, lng: -75.472822 },
@@ -310,6 +309,17 @@
         }
     });
 
+    // Función para calcular distancia total en km sumando distancias entre estaciones consecutivas
+    function calcularDistanciaTotalKm(estacionesArray) {
+        let total = 0;
+        for (let i = 0; i < estacionesArray.length - 1; i++) {
+            const latlng1 = L.latLng(estacionesArray[i].lat, estacionesArray[i].lng);
+            const latlng2 = L.latLng(estacionesArray[i+1].lat, estacionesArray[i+1].lng);
+            total += latlng1.distanceTo(latlng2); // en metros
+        }
+        return total / 1000; // en km
+    }
+
     // Botón Buscar
     document.getElementById('buscar').addEventListener('click', () => {
         const origenData = estacionOrigenSel.value;
@@ -346,9 +356,11 @@
 
         // Construir array con coordenadas para la línea y marcar estaciones intermedias
         const latlngs = [];
+        const estacionesRecorridas = [];
         for (let i = origenIdx; i <= destinoIdx; i++) {
             const est = rutaSeleccionada.estaciones[i];
             latlngs.push([est.lat, est.lng]);
+            estacionesRecorridas.push(est);
 
             // No agregar marcador para origen y destino, sólo para intermedias
             if (i !== origenIdx && i !== destinoIdx) {
@@ -369,14 +381,22 @@
         const boundsRuta = L.latLngBounds(latlngs);
         map.fitBounds(boundsRuta.pad(0.3));
 
-        // Calcular tiempo estimado (simulado)
-        tiempoEstimado = `${Math.round(Math.random() * 20 + 5)} min`;
+        // Calcular tiempo estimado realista
+        const velocidadKmH = 30; // velocidad promedio Transcaribe
+        const tiempoPorSemaforo = 1.5; // minutos por semáforo
+        const cantidadSemaforos = 10;  // semáforos estimados en la vía
+
+        const distanciaTotalKm = calcularDistanciaTotalKm(estacionesRecorridas);
+        const tiempoEstimadoMin = (distanciaTotalKm / velocidadKmH) * 60 + (cantidadSemaforos * tiempoPorSemaforo);
+
+        // Mostrar tiempo estimado en input
+        tiempoEstimado = `${Math.round(tiempoEstimadoMin)} min`;
         tiempoInput.value = tiempoEstimado;
 
         confirmarBtn.disabled = false;
     });
 
-    // Botón Confirmar Ruta
+    // Botón Confirmar Ruta con lógica para enviar registro al backend
     confirmarBtn.addEventListener('click', () => {
         if (!rutaSeleccionada || !origenSeleccionado || !destinoSeleccionado) {
             alert('Completa la selección antes de confirmar la ruta.');
@@ -391,13 +411,37 @@
             estacionesRuta.push(rutaSeleccionada.estaciones[i].nombre);
         }
 
-        textoConfirmacion.innerHTML = `
-            Has escogido la ruta <strong>${rutaSeleccionada.nombre}</strong>.<br>
-            Las estaciones que recorrerás son:<br> ${estacionesRuta.join(', ')}.<br>
-            Tiempo estimado: <strong>${tiempoEstimado}</strong>.<br><br>
-            ¡Buen viaje!
-        `;
-        modal.style.display = 'flex';
+        // Preparamos datos para enviar
+        const registro = {
+            rutaId: rutaSeleccionada.id,
+            rutaNombre: rutaSeleccionada.nombre,
+            origen: origenSeleccionado.nombre,
+            destino: destinoSeleccionado.nombre,
+            estacionesRecorridas: estacionesRuta,
+            tiempoEstimado: Math.round(parseInt(tiempoEstimado)) || 0
+        };
+
+        // Enviar datos al backend vía POST
+        fetch('/api/rutas/registro', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(registro)
+        })
+        .then(res => {
+            if (res.ok) {
+                // Mostrar modal con confirmación
+                textoConfirmacion.innerHTML = `
+                    Has escogido la ruta <strong>${registro.rutaNombre}</strong>.<br>
+                    Las estaciones que recorrerás son:<br> ${registro.estacionesRecorridas.join(', ')}.<br>
+                    Tiempo estimado: <strong>${registro.tiempoEstimado} min</strong>.<br><br>
+                    ¡Buen viaje!
+                `;
+                modal.style.display = 'flex';
+            } else {
+                alert('Error al guardar la ruta en el servidor.');
+            }
+        })
+        .catch(() => alert('Error de conexión con el servidor.'));
     });
 
     // Botón Aceptar en modal
