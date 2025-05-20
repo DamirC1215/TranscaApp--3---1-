@@ -24,6 +24,7 @@ public class Usuario {
     private String apellido;
     private String sexo;
     private LocalDate fechaNacimiento;
+    private Double saldo = 0.0;
     private String tipo = "USUARIO"; // Siempre será "USUARIO"
 
     // Relación OneToMany con Recarga

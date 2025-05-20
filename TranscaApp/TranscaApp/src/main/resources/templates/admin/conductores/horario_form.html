@@ -4,35 +4,62 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Asignar Horario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
-<body>
-<h2>Asignar Horario</h2>
-<form th:action="@{|/admin/conductores/${conductorId}/horarios/nuevo|}"
-      th:object="${horario}" method="post">
+<body style="background-color: #f8f9fa;">
 
-    <!-- oculto para que Spring lo enlace a horario.conductorId -->
-    <input type="hidden" th:field="*{conductorId}" th:value="${conductorId}" />
+<div class="container py-4" style="max-width: 600px;">
 
-    <label>Inicio Jornada:</label>
-    <input type="datetime-local" th:field="*{inicioJornada}" required/><br/>
+    <!-- Botones de navegación -->
+    <div class="mb-4 d-flex gap-2">
+        <a href="#" th:href="@{/admin/indexAdm}" class="btn btn-secondary" title="Volver a la página anterior">
+            &larr; Volver a Página Anterior
+        </a>
+        <a href="#" th:href="@{/admin/panel}" class="btn btn-outline-primary" title="Volver al Panel Principal">
+            &larr; Volver al Panel Principal
+        </a>
+    </div>
 
-    <label>Inicio Descanso:</label>
-    <input type="datetime-local" th:field="*{inicioDescanso}" required/><br/>
+    <h2 class="mb-4 text-primary">Asignar Horario</h2>
+    <form th:action="@{|/admin/conductores/${conductorId}/horarios/nuevo|}" th:object="${horario}" method="post" class="bg-white p-4 rounded shadow-sm">
 
-    <label>Fin Descanso:</label>
-    <input type="datetime-local" th:field="*{finDescanso}" required/><br/>
+        <input type="hidden" th:field="*{conductorId}" th:value="${conductorId}" />
 
-    <label>Fin Jornada:</label>
-    <input type="datetime-local" th:field="*{finJornada}" required/><br/>
+        <div class="mb-3">
+            <label for="inicioJornada" class="form-label">Inicio Jornada:</label>
+            <input type="datetime-local" class="form-control" id="inicioJornada" th:field="*{inicioJornada}" required/>
+        </div>
 
-    <label>ID Transcaribe:</label>
-    <input type="number" th:field="*{numeroTranscaribe}" placeholder="ID Transcaribe" required/><br/>
+        <div class="mb-3">
+            <label for="inicioDescanso" class="form-label">Inicio Descanso:</label>
+            <input type="datetime-local" class="form-control" id="inicioDescanso" th:field="*{inicioDescanso}" required/>
+        </div>
 
-    <label>Ruta Asignada:</label>
-    <input type="text" th:field="*{rutaAsignada}" placeholder="Ruta" required/><br/>
+        <div class="mb-3">
+            <label for="finDescanso" class="form-label">Fin Descanso:</label>
+            <input type="datetime-local" class="form-control" id="finDescanso" th:field="*{finDescanso}" required/>
+        </div>
 
-    <button type="submit">Guardar Horario</button>
-</form>
-<a th:href="@{/admin/conductores}">← Volver</a>
+        <div class="mb-3">
+            <label for="finJornada" class="form-label">Fin Jornada:</label>
+            <input type="datetime-local" class="form-control" id="finJornada" th:field="*{finJornada}" required/>
+        </div>
+
+        <div class="mb-3">
+            <label for="numeroTranscaribe" class="form-label">ID Transcaribe:</label>
+            <input type="number" class="form-control" id="numeroTranscaribe" th:field="*{numeroTranscaribe}" placeholder="ID Transcaribe" required/>
+        </div>
+
+        <div class="mb-4">
+            <label for="rutaAsignada" class="form-label">Ruta Asignada:</label>
+            <input type="text" class="form-control" id="rutaAsignada" th:field="*{rutaAsignada}" placeholder="Ruta" required/>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Guardar Horario</button>
+    </form>
+    <a th:href="@{/admin/conductores}" class="btn btn-link mt-3">← Volver</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

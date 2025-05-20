@@ -1,52 +1,54 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-    <link rel="icon" href="/img/logo-tc.ico" type="image/x-icon">
-    <link rel="stylesheet" th:href="@{css/style.css}">
+    <link rel="icon" href="/img/logo-tc.ico" type="image/x-icon" />
+    <link rel="stylesheet" th:href="@{css/style.css}" />
     <script th:src="@{js/script.js}"></script>
-    <title>TransCaribe</title>   
-    
+    <title>TransCaribe</title>
 </head>
 <body>
-    <nav>
-        <div class="logo">
-            <h1 data-aos="fade-up" data-aos-duration="2000" data-aos-delay="700">Trans<span>Caribe</span></h1>
+<nav>
+    <div class="logo">
+        <h1 data-aos="fade-up" data-aos-duration="2000" data-aos-delay="700">Trans<span>Caribe</span></h1>
+    </div>
+    <div class="links">
+        <div class="link" data-aos="fade-up" data-aos-duration="1200"><a th:href="@{/inicio}">Inicio</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="100"><a th:href="@{/sobre}">Sobre</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="200"><a th:href="@{/servicios}">Servicios</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="300"><a th:href="@{/paginas}">Páginas</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="400"><a th:href="@{/contactos}">Contactos</a></div>
+        <!-- Link Datos igual estilo que contactos -->
+        <div class="link" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="500">
+            <a href="https://tecnocomfenalcoedu-my.sharepoint.com/:u:/g/personal/isabellagonzalezg_tecnocomfenalco_edu_co/Ef5Zc-VRKvJPjiZCD-fNb8YB4nhQSOv1GolasEdgZSFfQQ?e=j3sNiG" target="_blank" rel="noopener noreferrer">Datos</a>
         </div>
-        <div class="links">
-            <div class="link" data-aos="fade-up" data-aos-duration="1200" ><a th:href="@{/inicio}">Inicio</a></div>
-            <div class="link" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="100"><a th:href="@{/sobre}">Sobre</a></div>
-            <div class="link" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="200"><a th:href="@{/servicios}">Servicios</a></div>
-            <div class="link" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="300"><a th:href="@{/paginas}">Páginas</a></div>
-            <div class="link" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="400"><a th:href="@{/contactos}">Contactos</a>
-        </div>
+    </div>
 
-        </div>
-        <div class="buttons">
-            <a th:href="@{/login}">
-                <button data-aos="fade-up" data-aos-duration="1200" data-aos-delay="600">Iniciar Sesión</button>
-            </a> 
-            <a th:href="@{/registro}">
-                <button data-aos="fade-up" data-aos-duration="1200" data-aos-delay="600">Registro</button>
-            </a>           
-        </div>
-    </nav>
-    <section>
-        <div class="content">
-            <h1 data-aos="fade-right" data-aos-duration="2000" data-aos-delay="700">¡Bienvenido al sistema!</h1>
-            <!--<p data-aos="fade-left" data-aos-duration="2000" data-aos-delay="800">La empresa en sí es una empresa muy exitosa. Los que causan problemas, perdónalos a ellos y a sus culpas.</p> -->
-            <button data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="900" onclick="window.location.href='https://transcaribe.gov.co/index.php/rutas-sitm/'">¡Visualiza tus Rutas!</button>
-        </div>
-    <!-- Formularios ocultos inicialmente -->
-    </section>
+    <div class="buttons">
+        <a th:href="@{/login}">
+            <button data-aos="fade-up" data-aos-duration="1200" data-aos-delay="600">Iniciar Sesión</button>
+        </a>
+        <a th:href="@{/registro}">
+            <button data-aos="fade-up" data-aos-duration="1200" data-aos-delay="600">Registro</button>
+        </a>
+    </div>
+</nav>
+<section>
+    <div class="content">
+        <h1 data-aos="fade-right" data-aos-duration="2000" data-aos-delay="700">¡Bienvenido al sistema!</h1>
+        <!--<p data-aos="fade-left" data-aos-duration="2000" data-aos-delay="800">La empresa en sí es una empresa muy exitosa. Los que causan problemas, perdónalos a ellos y a sus culpas.</p> -->
+        <button data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="900" onclick="window.location.href='https://transcaribe.gov.co/index.php/rutas-sitm/'">¡Visualiza tus Rutas!</button>
+    </div>
+</section>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script>
-        AOS.init();
-    </script>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<script>
+    AOS.init();
+</script>
+
 </body>
 </html>

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Perfil - Usuario Transcaribe</title>
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
-        
+
         * {
             margin: 0;
             padding: 0;
@@ -50,7 +50,8 @@
             transition: color 0.1s ease, border-bottom 0.1s ease;
         }
 
-        .menu a:hover, .menu a.active {
+        .menu a:hover,
+        .menu a.active {
             color: rgb(252, 140, 13);
         }
 
@@ -85,62 +86,61 @@
         }
 
         .card-container {
-        background-image: url('img/imagen16.jpg'); /* Imagen de fondo */
-        background-size: cover;
-        background-position: center;
-        width: 350px; /* Reduce el ancho de la tarjeta */
-        height: 200px; /* Reduce la altura de la tarjeta */
-        border-radius: 15px;
-        padding: 15px; /* Ajusta el padding para que el contenido quede bien */
-        color: #fff;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .card-details {
-        font-size: 0.8rem; /* Ajusta el tamaño del texto si es necesario */
-    }
-
-    .card-id, .card-owner {
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .card-balance {
-        font-size: 1.3rem; /* Ajusta el tamaño del saldo */
-        font-weight: bold;
-    }
-
-    .reload-button {
-        background-color: #ff6a00;
-        color: #fff;
-        border: none;
-        padding: 8px 12px; /* Ajusta el tamaño del botón */
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 0.8rem;
-        transition: background 0.3s;
-    }
-
-        .routes-container {
-            background-color: #fff;
-            border-radius: 8px;
+            background-image: url('img/imagen16.jpg');
+            background-size: cover;
+            background-position: center;
+            width: 350px;
+            height: 200px;
+            border-radius: 15px;
             padding: 15px;
+            color: #fff;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-            color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .routes-title {
+        .card-details {
+            font-size: 0.8rem;
+        }
+
+        .card-id,
+        .card-owner {
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
-        .route-item {
-            font-size: 0.9rem;
-            padding: 5px 0;
-            border-bottom: 1px solid #ddd;
+        .card-balance {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .reload-button {
+            background-color: #ff6a00;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.3s;
+        }
+
+        .reload-button:hover {
+            background-color: #e55a00;
+        }
+
+        /* Mensajes de error y éxito */
+        .message-error {
+            color: red;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .message-success {
+            color: green;
+            margin: 10px 0;
+            font-weight: bold;
         }
 
         .container {
@@ -230,7 +230,6 @@
         <div class="menu">
             <a th:href="@{/perfil}" class="active">Perfil</a>
             <a th:href="@{/mapa}">Mapa</a>
-            
         </div>
     </div>
     <div class="user-menu">
@@ -241,37 +240,35 @@
 <div class="main-container">
     <!-- Sección de tarjeta y rutas -->
     <div class="card-section">
+
+        <!-- Mostrar mensaje de error si existe -->
+        <div th:if="${errorSaldo != null}" class="message-error">
+            <p th:text="${errorSaldo}"></p>
+        </div>
+
+        <!-- Mostrar mensaje de éxito si existe -->
+        <div th:if="${successMessage != null}" class="message-success">
+            <p th:text="${successMessage}"></p>
+        </div>
+
         <!-- Tarjeta de Transcaribe -->
-        <div class="card-container">
-            <div th:if="${tarjeta != null}" class="card-details">
+        <div class="card-container" th:if="${tarjeta != null}">
+            <div class="card-details">
                 <div class="card-id">ID: <span th:text="${tarjeta.numeroDeBarras}"></span></div>
                 <div class="card-balance">Saldo: <span th:text="'$' + ${tarjeta.saldo}"></span></div>
             </div>
-            <div class="message" th:if="${successMessage != null}">
-                <p th:text="${successMessage}"></p>
-            </div>
-            <div th:if="${errorMessage != null}" class="alert alert-danger">
-                <span th:text="${errorMessage}"></span>
-            </div> 
-            <form th:action="@{/recarga}" method="get" class="recarga-form" th:if="${tarjeta != null}">
+            <form th:action="@{/recarga}" method="get" class="recarga-form">
                 <button type="submit" class="reload-button">Recargar</button>
             </form>
-            <div th:if="${tarjeta == null}">
-                <p>Aún no tienes una tarjeta asociada.</p>
-                <form th:action="@{/comprar-tarjeta}" method="get">
-                    <button class="reload-button">Comprar Tarjeta</button>
-                </form>
-            </div>
         </div>
 
-        <!-- Últimas rutas registradas 
-        <div class="routes-container">
-            <div class="routes-title">Últimas rutas registradas</div>
-            <div id="routesList">
-                 Aquí se mostrarán las rutas 
-            </div>
-        </div>-->
-    </div> 
+        <div th:if="${tarjeta == null}">
+            <p>Aún no tienes una tarjeta asociada.</p>
+            <form th:action="@{/comprar-tarjeta}" method="get">
+                <button class="reload-button">Comprar Tarjeta</button>
+            </form>
+        </div>
+    </div>
 
     <!-- Formulario de perfil -->
     <div class="container">
@@ -280,15 +277,15 @@
             <div class="profile-section">
                 <div class="profile-field">
                     <label for="nombres">Nombres</label>
-                    <input type="text" id="nombres" th:field="*{nombres}" readonly/>
+                    <input type="text" id="nombres" th:field="*{nombres}" readonly />
                 </div>
                 <div class="profile-field">
                     <label for="primerApellido">Apellidos</label>
-                    <input type="text" id="Apellido" th:field="*{apellido}" readonly/>
+                    <input type="text" id="Apellido" th:field="*{apellido}" readonly />
                 </div>
                 <div class="profile-field">
                     <label for="email">Email</label>
-                    <input type="email" id="email" th:field="*{email}" readonly/>
+                    <input type="email" id="email" th:field="*{email}" readonly />
                 </div>
                 <div class="profile-field">
                     <label for="sexo">Sexo</label>

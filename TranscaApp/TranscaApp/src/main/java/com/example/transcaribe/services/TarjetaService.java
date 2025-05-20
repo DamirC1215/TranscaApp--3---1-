@@ -29,7 +29,6 @@ public class TarjetaService {
         tarjetaRepository.save(tarjeta);
     }
 
-
     public List<Recarga> obtenerHistorialRecargas(String tarjetaId) {
         Tarjeta tarjeta = tarjetaRepository.findById(tarjetaId)
                 .orElseThrow(() -> new IllegalArgumentException("Tarjeta no encontrada"));
@@ -40,7 +39,6 @@ public class TarjetaService {
         return tarjetaRepository.save(tarjeta);
     }
 
-
     public List<Tarjeta> obtenerTarjetasSinUsuario() {
         return tarjetaRepository.findAll();
     }
@@ -48,11 +46,9 @@ public class TarjetaService {
     public List<Tarjeta> obtenerTarjetasUsuario(Usuario usuario) {
         return tarjetaRepository.findAllByUsuarioId(usuario.getId());
     }
-    
 
     // Asignar una tarjeta al azar al usuario
     public Tarjeta asignarTarjetaExistente(Usuario usuario) {
-        // Buscar una tarjeta no asignada (usuario es null)
         List<Tarjeta> tarjetasUsuarios = obtenerTarjetasUsuario(usuario);
         Tarjeta tn = new Tarjeta();
 
@@ -62,15 +58,6 @@ public class TarjetaService {
             tn.setNumeroDeBarras(UUID.randomUUID().toString());
             tn = crearTarjeta(tn);
         } else {
-            tn = tarjetasUsuarios.get(0);
-        }
-        {
-            tn = tarjetasUsuarios.get(0);
-        }
-        {
-            tn = tarjetasUsuarios.get(0);
-        }
-        {
             tn = tarjetasUsuarios.get(0);
         }
 
@@ -90,4 +77,8 @@ public class TarjetaService {
         return tarjetaRepository.findById(tarjetaId);
     }
 
+    // **Método para guardar tarjeta actualizada**
+    public Tarjeta guardarTarjeta(Tarjeta tarjeta) {
+        return tarjetaRepository.save(tarjeta);
+    }
 }
