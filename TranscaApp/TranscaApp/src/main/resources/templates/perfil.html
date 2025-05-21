@@ -15,12 +15,17 @@
         }
 
         body {
-            background-color: #f4f7f6;
+            background-image: url('img/imagen10.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #ffffff;
             font-family: 'Arial', sans-serif;
+            backdrop-filter: blur(5px);
         }
 
         header {
-            background-color: rgb(255, 255, 255);
+            background-color: rgba(223, 215, 215, 0.45);
             color: #333;
             padding: 10px 30px;
             display: flex;
@@ -28,6 +33,7 @@
             align-items: center;
             position: relative;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(2px);
         }
 
         .menu-container {
@@ -45,7 +51,7 @@
 
         .menu a {
             text-decoration: none;
-            color: #666;
+            color: #fafafa;
             padding: 10px 5px;
             transition: color 0.1s ease, border-bottom 0.1s ease;
         }
@@ -57,16 +63,16 @@
 
         .user-menu a {
             text-decoration: none;
-            color: #666;
+            color: #faf8f8;
             font-size: 0.9em;
             padding: 10px 15px;
-            border: 1px solid #ccc;
+            border: 1px solid #ffffff;
             border-radius: 5px;
             transition: all 0.3s ease;
         }
 
         .user-menu a:hover {
-            background-color: #f0f0f0;
+            background-color: #ffffff;
             border-color: #ff6a00;
             color: #ff6a00;
         }
@@ -93,7 +99,7 @@
             height: 200px;
             border-radius: 15px;
             padding: 15px;
-            color: #fff;
+            color: #fffffff6;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
@@ -145,7 +151,7 @@
 
         .container {
             flex: 1;
-            background-color: #ffffff;
+            background-color: #fffcfc2d; /* fondo translúcido */
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 30px;
@@ -155,7 +161,7 @@
             font-size: 24px;
             margin-bottom: 20px;
             text-align: center;
-            color: #666;
+            color: #fffffffa;
         }
 
         form {
@@ -177,7 +183,7 @@
 
         .profile-field label {
             font-size: 14px;
-            color: #666;
+            color: #ffffff;
             margin-bottom: 8px;
         }
 
@@ -185,9 +191,11 @@
         .profile-field select {
             padding: 10px;
             font-size: 14px;
-            border: 1px solid #ccc;
+            border: 1px solid white;
             border-radius: 4px;
             transition: all 0.3s ease;
+            background: transparent;
+            color: #fff;
         }
 
         .profile-field input:focus,
@@ -195,6 +203,8 @@
             border-color: #f16f05;
             outline: none;
             box-shadow: 0 0 5px rgba(255, 155, 5, 0.986);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
         }
 
         .edit-button {
@@ -296,12 +306,12 @@
                 </div>
                 <div class="profile-field">
                     <label for="fechaNacimiento">Fecha de Nacimiento</label>
-                    <input type="date" id="fechaNacimiento" th:field="*{fechaNacimiento}" readonly />
+                    <input type="date" id="fechaNacimiento" th:field="*{fechaNacimiento}" />
                 </div>
             </div>
+            <button type="submit" class="edit-button">Actualizar perfil</button>
         </form>
     </div>
 </div>
-
 </body>
 </html>

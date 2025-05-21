@@ -15,6 +15,7 @@ public class MongoCreateDropConfig {
     @Bean
     public ApplicationRunner createDropMongoCollections() {
         return args -> {
+
             // Eliminar y volver a crear la colección 'recargas'
 
             mongoTemplate.createCollection("recargas");

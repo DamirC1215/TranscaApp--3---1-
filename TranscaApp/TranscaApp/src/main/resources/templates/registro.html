@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - Usuarios</title>
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: "Poppins", sans-serif;
         }
-        
+
         body {
-            background-image: url('img/imagen18.jpg'); 
+            background-image: url('img/imagen18.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -24,15 +24,17 @@
             align-items: center;
             height: 100vh;
             padding: 0 20px;
+            backdrop-filter: blur(5px);
         }
 
-        .container {
+        o br .container {
             background: rgba(129, 101, 101, 0.15);
             backdrop-filter: blur(10px);
             border: 2px solid rgba(255, 255, 255, 0.5);
             border-radius: 15px;
             padding: 20px 30px;
-            max-width: 800px; /* Ancho más amplio */
+            max-width: 800px;
+            /* Ancho más amplio */
             width: 100%;
             color: #fff;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -74,7 +76,7 @@
 
         .input-box input {
             width: 100%;
-            padding: 10px; 
+            padding: 10px;
             border: none;
             border-radius: 8px;
             font-size: 1rem;
@@ -104,13 +106,13 @@
         }
 
         .gender-option input {
-            accent-color: #ff6a00; 
+            accent-color: #ff6a00;
             cursor: pointer;
         }
 
         .form button {
             width: 100%;
-            background-color: #ff6a00; 
+            background-color: #ff6a00;
             border: none;
             color: #fff;
             padding: 12px;
@@ -124,6 +126,11 @@
 
         .form button:hover {
             background-color: #ff7f33;
+            background-color: transparent;
+            backdrop-filter: brightness(40%);
+            color: rgb(219, 120, 7);
+            border: 2px solid rgb(219, 120, 7);
+            box-shadow: 0 0 10px 4px rgb(219, 120, 7);
         }
 
         .container a {
@@ -137,51 +144,53 @@
         }
     </style>
 </head>
-<body>
-    <section class="container">
-        
-        <div class="header">
-            <a href="/index">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left">
-                    <line x1="19" y1="12" x2="5" y2="12"></line>
-                    <polyline points="12 19 5 12 12 5"></polyline>
-                </svg>
-            </a>
-            <h1>Registro</h1>
-        </div>
 
-        <!-- Formulario de registro -->
-        <form action="/register" th:action="@{/registro}" method="post" th:object="${usuario}" class="form">
-            <div class="input-box">
-                <label>Nombre</label>
-                <input type="text" th:field="*{nombres}" placeholder="Ingresa tu nombre" required />
+<body>
+<section class="container">
+
+    <div class="header">
+        <a href="/index">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </a>
+        <h1>Registro</h1>
+    </div>
+
+    <!-- Formulario de registro -->
+    <form action="/register" th:action="@{/registro}" method="post" th:object="${usuario}" class="form">
+        <div class="input-box">
+            <label>Nombre</label>
+            <input type="text" th:field="*{nombres}" placeholder="Ingresa tu nombre" required />
+        </div>
+        <div class="input-box">
+            <label>Apellidos</label>
+            <input type="text" th:field="*{apellido}" placeholder="Ingresa tu Apellido" required />
+        </div>
+        <div class="input-box">
+            <label>Correo Electrónico</label>
+            <input type="text" th:field="*{email}" placeholder="Ingresa tu Correo Electronico" required />
+        </div>
+        <div class="input-box">
+            <label>Contraseña</label>
+            <input type="password" th:field="*{contraseña} " placeholder="Ingresa tu Contraseña" required />
+        </div>
+        <div class="input-box">
+            <label>Fecha de Nacimiento</label>
+            <input type="date" th:field="*{fechaNacimiento}" placeholder="Ingresa tu Fecha de Nacimiento" required />
+        </div>
+        <div class="gender-box">
+            <h3>Género</h3>
+            <div class="gender-option">
+                <label><input type="radio" id="check-male" th:field="*{sexo}" name="genero" value="Masculino" required /> Masculino</label>
+                <label><input type="radio" id="check-female" th:field="*{sexo}" name="genero" value="Femenino" required /> Femenino</label>
+
             </div>
-            <div class="input-box">
-                <label>Apellidos</label>
-                <input type="text" th:field="*{apellido}"placeholder="Ingresa tu Primer Apellido" required />
-            </div>
-            <div class="input-box">
-                <label>Correo Electrónico</label>
-                <input type="text" th:field="*{email}" placeholder="Ingresa tu Correo Electronico" required />
-            </div>
-            <div class="input-box">
-                <label>Contraseña</label>
-                <input type="password" th:field="*{contraseña} "placeholder="Ingresa tu Contraseña" required />
-            </div>
-            <div class="input-box">
-                <label>Fecha de Nacimiento</label>
-                <input type="date" th:field="*{fechaNacimiento}" placeholder="Ingresa tu Fecha de Nacimiento" required />
-            </div>
-            <div class="gender-box">
-                <h3>Género</h3>
-                <div class="gender-option">
-                    <label><input type="radio" id="check-male" th:field="*{sexo}" name="genero" value="Masculino" required /> Masculino</label>
-                    <label><input type="radio" id="check-female" th:field="*{sexo}" name="genero" value="Femenino" required /> Femenino</label>
-                
-                </div>
-            </div>
-            <button type="submit">Registrarse</button>
-        </form>
-    </section>
+        </div>
+        <button type="submit">Registrarse</button>
+    </form>
+</section>
 </body>
+
 </html>
